@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "Ryoshi"
+version = "0.1.0"
+description = "EVE Whaling Assistant"
+authors = ["Spencer Anders"]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Flask = "^2.0.3"
+esipy = {url = "https://files.pythonhosted.org/packages/19/b8/a64d762e5dedbddc4981952caa3d3d1bcac3740435a7ff9de155c74ce4d2/EsiPy-1.2.2.tar.gz"}
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
