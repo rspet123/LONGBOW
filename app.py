@@ -14,6 +14,7 @@ import configparser
 import random
 import hmac
 import hashlib
+import eve_data_tools
 
 
 #https://zkillboard.com/api/kills/characterID/447073625/
@@ -81,7 +82,8 @@ def hello_world():
 def stats():
     # get_characters_character_id_location
     if data_store.get("character_data",False):
-        char_id = data_store["character_data"]["sub"].split(':')[2]
+        character_data = data_store["character_data"]
+        char_id = character_data["sub"].split(':')[2]
         op = esiapp.op['get_characters_character_id_location'](
             character_id=char_id
         )
