@@ -1,6 +1,8 @@
 from Player import player
 from datetime import datetime
 class systemreport:
+    recent_kills = []
+    # TODO integrate with zKill API
     players = {}
     system_name = {}
     time = ""

@@ -75,7 +75,7 @@ def get_system_distance(system_data: dict, system_1: str, system_2: str):
     system_2_data = system_data[system_2]
     coords_1 = (system_1_data["x_coord_min"], system_1_data["y_coord_min"], system_1_data["z_coord_min"])
     coords_2 = (system_2_data["x_coord_max"], system_2_data["y_coord_max"], system_2_data["z_coord_max"])
-    #Something is slightly off with calculation, as im not sure exactly how EVE calculates jump distance
+    # TODO Something is slightly off with calculation, as im not sure exactly how EVE calculates jump distance
     dist = math.sqrt(
         (coords_2[0] - coords_1[0]) ** 2 + (coords_2[1] - coords_1[1]) ** 2 + (coords_2[2] - coords_1[2]) ** 2)
     return dist / (10 ** 16)
