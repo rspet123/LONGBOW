@@ -62,7 +62,7 @@ def get_system_jumps(system_data: dict):
                 jumps_to = system_data[jump[3]]["name"]
 
                 system_data[jump[2]]["gates"].append(jump[3])
-                #print(system_data[jump[2]]["name"] + "\t --> \t" + jumps_to)
+                # print(system_data[jump[2]]["name"] + "\t --> \t" + jumps_to)
             except KeyError:
                 print("No Such System")
 
@@ -77,30 +77,39 @@ def get_system_distance(system_data: dict, system_1: str, system_2: str):
     coords_2 = (system_2_data["x_coord_max"], system_2_data["y_coord_max"], system_2_data["z_coord_max"])
     dist = math.sqrt(
         (coords_2[0] - coords_1[0]) ** 2 + (coords_2[1] - coords_1[1]) ** 2 + (coords_2[2] - coords_1[2]) ** 2)
-    return dist / (1*10**16)
+    return dist / (1 * 10 ** 16)
 
 
 def get_path_to_system(system_data: dict, start: str, end: str):
     """BFS or perhaps A* search to find jump min distance"""
     queue = []
-    print("Finding route from " + system_data[start]["name"] + " to "+ system_data[end]["name"])
+    visited = []
+    print("Finding route from " + system_data[start]["name"] + " to " + system_data[end]["name"])
     system_1_data = system_data[start]
     current = system_1_data["gates"]
-    queue.append((current,0))
+    distance_to_target = get_system_distance(system_data, start, end)
+    print("Distance To Target: " + str(distance_to_target))
+    queue.append((current, 0, distance_to_target))
     while queue:
         system = queue.pop(0)
+        visited.append(system[0])
         for gate in system[0]:
             if gate == end:
-                return(system[1]+1)
+                return (system[1] + 1)
             else:
-                queue.append((system_data[gate]["gates"],system[1]+1))
-
-
+                if gate not in visited:
+                    curr_dist = get_system_distance(system_data, gate, end)
+                    queue.append((system_data[gate]["gates"], system[1] + 1, curr_dist))
+                    print("System:" + system_data[gate]["name"] + " Current Distance " + str(curr_dist))
+                    visited.append(gate)
+                else:
+                    # print("Already Visited " + system_data[gate]["name"])
+                    pass
 
     return "dist"
 
 
 name_data = get_system_data_by_name()
 sysdata = get_system_jumps(get_system_data())
-#print(get_system_distance(sysdata, name_data["1DQ1-A"]["system_id"], name_data["T5ZI-S"]["system_id"]))
-print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["3-DMQT"]["system_id"]))
+# print(get_system_distance(sysdata, name_data["1DQ1-A"]["system_id"], name_data["T5ZI-S"]["system_id"]))
+print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["Jita"]["system_id"]))
