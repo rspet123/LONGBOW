@@ -4,6 +4,7 @@ import math
 
 def get_system_data():
     system_data = {}
+
     # regionID,constellationID,solarSystemID,solarSystemName,x,y,z,xMin,xMax,yMin,yMax,zMin,zMax,luminosity,border,fringe,corridor,hub,international,regional,constellation,security,factionID,radius,sunTypeID,securityClass
     with open("resources/mapSolarSystems.csv") as systems:
         file = csv.reader(systems)
@@ -14,6 +15,12 @@ def get_system_data():
                                         "x_coord": float(line[4]),
                                         "y_coord": float(line[5]),
                                         "z_coord": float(line[6]),
+                                        "x_coord_min": float(line[7]),
+                                        "y_coord_min": float(line[9]),
+                                        "z_coord_min": float(line[11]),
+                                        "x_coord_max": float(line[8]),
+                                        "y_coord_max": float(line[10]),
+                                        "z_coord_max": float(line[12]),
                                         "sec_status": line[21],
                                         "gates": []}
             except Exception:
@@ -21,17 +28,14 @@ def get_system_data():
 
     return system_data
 
+
 def get_system_data_by_name():
     system_data = {}
-    # regionID,constellationID,solarSystemID,solarSystemName,x,y,z,xMin,xMax,yMin,yMax,zMin,zMax,luminosity,border,fringe,corridor,hub,international,regional,constellation,security,factionID,radius,sunTypeID,securityClass
     with open("resources/mapSolarSystems.csv") as systems:
         file = csv.reader(systems)
         for line in file:
             try:
-                system_data[line[3]] = {"system_id": line[2],
-                                        "x_coord": float(line[4]),
-                                        "y_coord": float(line[5]),
-                                        "z_coord": float(line[6]),}
+                system_data[line[3]] = {"system_id": line[2]}
             except Exception:
                 print("Casting Error")
 
@@ -58,7 +62,7 @@ def get_system_jumps(system_data: dict):
                 jumps_to = system_data[jump[3]]["name"]
 
                 system_data[jump[2]]["gates"].append(jump[3])
-                print(system_data[jump[2]]["name"] + "\t --> \t" + jumps_to)
+                #print(system_data[jump[2]]["name"] + "\t --> \t" + jumps_to)
             except KeyError:
                 print("No Such System")
 
@@ -66,14 +70,37 @@ def get_system_jumps(system_data: dict):
 
 
 def get_system_distance(system_data: dict, system_1: str, system_2: str):
+    """simple 3d distance calculation for jump range, returns distance in LY"""
     system_1_data = system_data[system_1]
     system_2_data = system_data[system_2]
-    coords_1 = (system_1_data["x_coord"],system_1_data["y_coord"],system_1_data["z_coord"])
-    coords_2 = (system_2_data["x_coord"], system_2_data["y_coord"], system_2_data["z_coord"])
-    dist = math.sqrt((coords_2[0]-coords_1[0])**2+(coords_2[1]-coords_1[1])**2+(coords_2[2]-coords_1[2])**2)
-    return dist
+    coords_1 = (system_1_data["x_coord_min"], system_1_data["y_coord_min"], system_1_data["z_coord_min"])
+    coords_2 = (system_2_data["x_coord_max"], system_2_data["y_coord_max"], system_2_data["z_coord_max"])
+    dist = math.sqrt(
+        (coords_2[0] - coords_1[0]) ** 2 + (coords_2[1] - coords_1[1]) ** 2 + (coords_2[2] - coords_1[2]) ** 2)
+    return dist / (1*10**16)
 
 
-sysdata = get_system_data_by_name()
+def get_path_to_system(system_data: dict, start: str, end: str):
+    """BFS or perhaps A* search to find jump min distance"""
+    queue = []
+    print("Finding route from " + system_data[start]["name"] + " to "+ system_data[end]["name"])
+    system_1_data = system_data[start]
+    current = system_1_data["gates"]
+    queue.append((current,0))
+    while queue:
+        system = queue.pop(0)
+        for gate in system[0]:
+            if gate == end:
+                return(system[1]+1)
+            else:
+                queue.append((system_data[gate]["gates"],system[1]+1))
 
-print(get_system_distance(sysdata, "1DQ1-A","T5ZI-S"))
+
+
+    return "dist"
+
+
+name_data = get_system_data_by_name()
+sysdata = get_system_jumps(get_system_data())
+#print(get_system_distance(sysdata, name_data["1DQ1-A"]["system_id"], name_data["T5ZI-S"]["system_id"]))
+print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["3-DMQT"]["system_id"]))
