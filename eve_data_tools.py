@@ -70,18 +70,19 @@ def get_system_jumps(system_data: dict):
 
 
 def get_system_distance(system_data: dict, system_1: str, system_2: str):
-    """simple 3d distance calculation for jump range, returns distance in LY"""
+    """simple 3d distance calculation for jump range, returns *rough* distance in LY"""
     system_1_data = system_data[system_1]
     system_2_data = system_data[system_2]
     coords_1 = (system_1_data["x_coord_min"], system_1_data["y_coord_min"], system_1_data["z_coord_min"])
     coords_2 = (system_2_data["x_coord_max"], system_2_data["y_coord_max"], system_2_data["z_coord_max"])
+    #Something is slightly off with calculation, as im not sure exactly how EVE calculates jump distance
     dist = math.sqrt(
         (coords_2[0] - coords_1[0]) ** 2 + (coords_2[1] - coords_1[1]) ** 2 + (coords_2[2] - coords_1[2]) ** 2)
-    return dist / (1 * 10 ** 16)
+    return dist / (10 ** 16)
 
 
 def get_path_to_system(system_data: dict, start: str, end: str):
-    """BFS or perhaps A* search to find jump min distance"""
+    """BFS to find gate jump min distance, returns -1 if no gate-to-gate route"""
     queue = []
     visited = []
     print("Finding route from " + system_data[start]["name"] + " to " + system_data[end]["name"])
@@ -106,7 +107,7 @@ def get_path_to_system(system_data: dict, start: str, end: str):
                     # print("Already Visited " + system_data[gate]["name"])
                     pass
 
-    return "dist"
+    return -1
 
 
 name_data = get_system_data_by_name()
