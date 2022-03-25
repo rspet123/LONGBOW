@@ -1,31 +1,30 @@
-from flask import Flask,request,session,url_for,render_template,redirect
+from flask import Flask, request, session, url_for, render_template, redirect
 
-#import esipy
-from esipy import EsiApp,EsiSecurity,EsiClient
+# import esipy
+from esipy import EsiApp, EsiSecurity, EsiClient
 from esipy.exceptions import APIException
-#import pickle
+# import pickle
 import configparser
 import random
 import hmac
 import hashlib
 import eve_data_tools
 
-
-#https://zkillboard.com/api/kills/characterID/447073625/
-
+# https://zkillboard.com/api/kills/characterID/447073625/
 
 
-#Init ESI stuff
+# Init ESI stuff
 config = configparser.ConfigParser()
 config.read("config.ini")
-CLIENT_ID = config.get('ESI','CLIENT_ID')
-SECRET_KEY = config.get('ESI','SECRET_KEY')
-CALLBACK = config.get('ESI','CALLBACK')
-USER_AGENT = config.get('ESI','USER_AGENT')
+CLIENT_ID = config.get('ESI', 'CLIENT_ID')
+SECRET_KEY = config.get('ESI', 'SECRET_KEY')
+CALLBACK = config.get('ESI', 'CALLBACK')
+USER_AGENT = config.get('ESI', 'USER_AGENT')
+
 
 def generate_token():
     """Generate OAuth token"""
-    chars = ('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     rand = random.SystemRandom()
     random_string = ''.join(rand.choice(chars) for _ in range(40))
     out = hmac.new(
@@ -34,6 +33,7 @@ def generate_token():
         hashlib.sha256
     ).hexdigest()
     return out
+
 
 esiapp = EsiApp().get_latest_swagger
 
@@ -50,13 +50,12 @@ esiclient = EsiClient(
     headers={'User-Agent': USER_AGENT}
 )
 
-
-#Flask Routes
+# Flask Routes
 app = Flask(__name__)
 app.secret_key = generate_token()
 
-
 data_store = {}
+
 
 @app.route('/sso/login')
 def login():
@@ -68,14 +67,16 @@ def login():
         scopes=['esi-location.read_location.v1']
     ))
 
+
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
+
 @app.get('/stats')
 def stats():
     # get_characters_character_id_location
-    if data_store.get("character_data",False):
+    if data_store.get("character_data", False):
         character_data = data_store["character_data"]
         char_id = character_data["sub"].split(':')[2]
         op = esiapp.op['get_characters_character_id_location'](
@@ -87,7 +88,6 @@ def stats():
         return str(system_id)
     else:
         return redirect(url_for("login"))
-
 
 
 @app.route('/sso/callback')
