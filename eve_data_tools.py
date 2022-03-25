@@ -34,8 +34,8 @@ def get_system_jumps(system_data: dict):
             try:
                 jumps_to = system_data[jump[3]]["name"]
 
-                system_data[jump[2]]["gates"].append(jumps_to)
-                print(system_data[jump[2]]["name"] + " --> "+jumps_to)
+                system_data[jump[2]]["gates"].append(jump[3])
+                print(system_data[jump[2]]["name"] + "\t --> \t"+jumps_to)
             except KeyError:
                 print("No Such System")
 
