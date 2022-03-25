@@ -23,7 +23,7 @@ import eve_data_tools
 
 #Init ESI stuff
 config = configparser.ConfigParser()
-config.read("config.INI")
+config.read("config.ini")
 CLIENT_ID = config.get('ESI','CLIENT_ID')
 SECRET_KEY = config.get('ESI','SECRET_KEY')
 CALLBACK = config.get('ESI','CALLBACK')
