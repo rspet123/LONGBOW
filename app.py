@@ -1,15 +1,9 @@
-from flask import Flask
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import session
-from flask import url_for
-import esipy
-from esipy import EsiApp
-from esipy import EsiClient
-from esipy import EsiSecurity
+from flask import Flask,request,session,url_for,render_template,redirect
+
+#import esipy
+from esipy import EsiApp,EsiSecurity,EsiClient
 from esipy.exceptions import APIException
-import pickle
+#import pickle
 import configparser
 import random
 import hmac
