@@ -86,8 +86,9 @@ def stats():
             character_id=char_id
         )
         location = esiclient.request(op)
-        print(str(location.raw))
-        return str(location.raw)
+        print(str(location.data))
+        system_id = location.data.solar_system_id
+        return str(system_id)
     else:
         return redirect(url_for("login"))
 
