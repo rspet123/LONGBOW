@@ -1,4 +1,4 @@
-from Player import player
+from Player import Player
 from datetime import datetime
 
 
