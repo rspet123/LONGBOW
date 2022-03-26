@@ -1,6 +1,7 @@
 from Player import player
 from datetime import datetime
 class systemreport:
+    """Class to store and analyze system reports"""
     players = {}
     system_name = {}
     time = ""

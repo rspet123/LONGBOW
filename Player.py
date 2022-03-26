@@ -1,5 +1,6 @@
 
 class player:
+    """Class to store and analyze player data"""
     name =""
     common_ships = []
     recent_deaths = []
