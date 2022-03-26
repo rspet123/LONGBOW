@@ -1,5 +1,5 @@
 
-class player:
+class Player:
     """Class to store and analyze player data"""
     name =""
     common_ships = []

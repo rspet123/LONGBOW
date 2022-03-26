@@ -1,5 +1,5 @@
 
-class ship:
+class Ship:
     ship_name = ""
     ship_type = ""
     hull = ""
