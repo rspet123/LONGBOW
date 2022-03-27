@@ -117,6 +117,7 @@ sysdata = get_system_jumps(get_system_data())
 print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["Jita"]["system_id"]))
 Player_1 = Player("Spencer Anders")
 
+print(Player_1.get_kills())
 print(Player_1.get_deaths())
-for system in Player_1.common_systems:
+for system in Player_1.common_systems.keys():
     print(sysdata[str(system)]["name"])

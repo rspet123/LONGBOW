@@ -7,7 +7,7 @@ class Player:
     common_ships = []
     recent_deaths = []
     recent_kills = []
-    common_systems = []
+    common_systems = {}
     char_id = ""
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
     # https://esi.evetech.net/latest/universe/ids/?datasourc =tranquility&language=en
@@ -41,7 +41,7 @@ class Player:
                 km_id) + "/" + km_hash + "/?datasource=tranquility").json()
             print(current_lossmail)
             self.recent_deaths.append(current_lossmail)
-            self.common_systems.append(current_lossmail["solar_system_id"])
+            self.common_systems[current_lossmail["solar_system_id"]] =  self.common_systems.get(current_lossmail["solar_system_id"],0)+1
         return death_data
 
     def get_kills(self,recent = 5):
@@ -53,7 +53,7 @@ class Player:
             current_killmail = requests.get("https://esi.evetech.net/latest/killmails/" + str(
                 km_id) + "/" + km_hash + "/?datasource=tranquility").json()
             self.recent_kills.append(current_killmail)
-            self.common_systems.append(current_killmail["solar_system_id"])
+            self.common_systems[current_killmail["solar_system_id"]] =  self.common_systems.get(current_killmail["solar_system_id"],0)+1
             print(current_killmail)
 
         return kills_data
