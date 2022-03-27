@@ -35,7 +35,7 @@ def generate_token():
     ).hexdigest()
     return out
 
-
+#Generate our ESI tools
 esiapp = EsiApp().get_latest_swagger
 
 esisecurity = EsiSecurity(
@@ -71,11 +71,12 @@ def login():
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return 'WIP'
 
 
 @app.get('/stats')
 def stats():
+    """Shows Stats for the current system, WIP"""
     # get_characters_character_id_location
     if data_store.get("character_data", False):
         character_data = data_store["character_data"]
