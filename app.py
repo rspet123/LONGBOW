@@ -1,6 +1,6 @@
 from flask import Flask, request, session, url_for, render_template, redirect
 
-#LONGBOW
+# LONGBOW
 # import esipy
 from esipy import EsiApp, EsiSecurity, EsiClient
 from esipy.exceptions import APIException
@@ -35,7 +35,8 @@ def generate_token():
     ).hexdigest()
     return out
 
-#Generate our ESI tools
+
+# Generate our ESI tools
 esiapp = EsiApp().get_latest_swagger
 
 esisecurity = EsiSecurity(
