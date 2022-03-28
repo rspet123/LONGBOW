@@ -143,6 +143,6 @@ Player_1 = Player("Spencer Anders")
 #print(Player_1.get_kills())
 #print(Player_1.get_deaths())
 print(name_data["1DQ1-A"])
-drifter_systems_nearby = get_nearest_drifter_systems(get_possible_drifter_systems(),sysdata,name_data["1DQ1-A"]["system_id"],3)
+drifter_systems_nearby = get_nearest_drifter_systems(get_possible_drifter_systems(),sysdata,name_data["EH2I-P"]["system_id"],3)
 for system in drifter_systems_nearby:
     print(sysdata[str(system)]["name"])
