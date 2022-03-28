@@ -3,6 +3,7 @@ import math
 from Player import Player
 from datetime import datetime
 
+
 def get_system_data():
     system_data = {}
 
@@ -45,12 +46,12 @@ def get_system_data_by_name():
 
 def get_possible_drifter_systems():
     drifter_systems = {}
-    with open("resources/drifter_holes.csv") as drifters:
+    with open("resources/JoveSystems.csv") as drifters:
         file = csv.reader(drifters)
         for line in file:
             drifter_systems[line[0].strip()] = {"system": line[0].strip(),
                                                 "constellation": line[1].strip(),
-                                                "region": line[2].strip()}
+                                                "region": line[3].strip()}
     return drifter_systems
 
 
@@ -110,22 +111,22 @@ def get_path_to_system(system_data: dict, start: str, end: str):
 
     return -1
 
-def get_nearest_drifter_systems(drifters:list, system_data: dict,system:str, jumps: int):
+
+def get_nearest_drifter_systems(drifters: list, system_data: dict, system: str, jumps: int):
     """Returns all drifter systems within x jumps"""
     drifters_nearby = []
     queue = []
     visited = []
     system_1_data = system_data[system]
     current = system_1_data["gates"]
-    start_time = datetime.now()
     queue.append((current, 0))
     while queue:
         system = queue.pop(0)
-        visited.append((system[0],system[1]+1))
+        visited.append((system[0], system[1] + 1))
         for gate in system[0]:
             if system_data[gate]["name"] in drifters and gate not in drifters_nearby:
                 drifters_nearby.append(gate)
-            if system[1]>=jumps:
+            if system[1] >= jumps:
                 return drifters_nearby
             else:
                 if gate not in visited:
@@ -139,7 +140,9 @@ sysdata = get_system_jumps(get_system_data())
 print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["Jita"]["system_id"]))
 Player_1 = Player("Spencer Anders")
 
-print(Player_1.get_kills())
-print(Player_1.get_deaths())
-for system in Player_1.common_systems.keys():
+#print(Player_1.get_kills())
+#print(Player_1.get_deaths())
+print(name_data["1DQ1-A"])
+drifter_systems_nearby = get_nearest_drifter_systems(get_possible_drifter_systems(),sysdata,name_data["1DQ1-A"]["system_id"],3)
+for system in drifter_systems_nearby:
     print(sysdata[str(system)]["name"])
