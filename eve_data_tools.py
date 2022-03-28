@@ -45,7 +45,7 @@ def get_system_data_by_name():
 
 def get_possible_drifter_systems():
     drifter_systems = {}
-    with open("resources/drifter_holes.csv") as drifters:
+    with open("resources/JoveSystems.csv") as drifters:
         file = csv.reader(drifters)
         for line in file:
             drifter_systems[line[0].strip()] = {"system": line[0].strip(),
@@ -109,7 +109,7 @@ def get_path_to_system(system_data: dict, start: str, end: str):
                     pass
 
     return -1
-
+# TODO ADD NEAREST DRIFTER SYSTEMS
 
 name_data = get_system_data_by_name()
 sysdata = get_system_jumps(get_system_data())
