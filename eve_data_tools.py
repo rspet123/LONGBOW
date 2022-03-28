@@ -1,7 +1,7 @@
 import csv
 import math
 from Player import Player
-
+from datetime import datetime
 
 def get_system_data():
     system_data = {}
@@ -45,7 +45,7 @@ def get_system_data_by_name():
 
 def get_possible_drifter_systems():
     drifter_systems = {}
-    with open("resources/JoveSystems.csv") as drifters:
+    with open("resources/drifter_holes.csv") as drifters:
         file = csv.reader(drifters)
         for line in file:
             drifter_systems[line[0].strip()] = {"system": line[0].strip(),
@@ -109,7 +109,29 @@ def get_path_to_system(system_data: dict, start: str, end: str):
                     pass
 
     return -1
-# TODO ADD NEAREST DRIFTER SYSTEMS
+
+def get_nearest_drifter_systems(drifters:list, system_data: dict,system:str, jumps: int):
+    """Returns all drifter systems within x jumps"""
+    drifters_nearby = []
+    queue = []
+    visited = []
+    system_1_data = system_data[system]
+    current = system_1_data["gates"]
+    start_time = datetime.now()
+    queue.append((current, 0))
+    while queue:
+        system = queue.pop(0)
+        visited.append((system[0],system[1]+1))
+        for gate in system[0]:
+            if system_data[gate]["name"] in drifters and gate not in drifters_nearby:
+                drifters_nearby.append(gate)
+            if system[1]>=jumps:
+                return drifters_nearby
+            else:
+                if gate not in visited:
+                    queue.append((system_data[gate]["gates"], system[1] + 1))
+                    visited.append(gate)
+
 
 name_data = get_system_data_by_name()
 sysdata = get_system_jumps(get_system_data())
