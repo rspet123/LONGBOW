@@ -30,7 +30,7 @@ class Player:
         try:
             db.Characters.insert_one(character)
         except Exception:
-            db.Characters.update_one(character,upsert=True)
+            1==1#db.Characters.update_one(character,upsert=True)
 
     @staticmethod
     def store_players(characters: list):
@@ -38,7 +38,7 @@ class Player:
         try:
             db.Characters.insert_many(characters)
         except Exception:
-            db.Characters.update_many(characters,upsert=True)
+            1==1#db.Characters.update_many(characters,upsert=True)
             
         
         
