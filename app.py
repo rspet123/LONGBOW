@@ -101,7 +101,11 @@ def post_system_report():
         stats = add_char.get_stats()
         char_list.append(add_char)
         print(add_char.common_ships)
-    return sys_name
+    near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,sys_name_to_id[sys_name]["system_id"],5)
+    out = ""
+    for drifter in near_drifters:
+        out += system_data[drifter]["name"] + ", "
+    return out
 
 
 @app.get('/stats')

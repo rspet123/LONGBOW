@@ -114,6 +114,7 @@ def get_path_to_system(system_data: dict, start: str, end: str):
 
 def get_nearest_drifter_systems(drifters: list, system_data: dict, system: str, jumps: int):
     """Returns all drifter systems within x jumps"""
+    # TODO Have this return a dict, with key of name, and value as #jumps
     drifters_nearby = []
     queue = []
     visited = []
