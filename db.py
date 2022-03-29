@@ -10,3 +10,4 @@ client = MongoClient("mongodb+srv://{username}:{pw}@longbow.luvkv.mongodb.net".f
 
 db = client["LONGBOW"]
 Systems = db["Systems"]
+Users = db["Users"]
