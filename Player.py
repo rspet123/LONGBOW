@@ -2,6 +2,8 @@ import requests
 import json
 
 import db
+
+
 class Player:
     name = ""
     corp_id = ""
@@ -20,6 +22,7 @@ class Player:
     recent_kills = 0
     sec_status = 0
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
+
     # TODO add images
     # https://zkillboard.com/api/stats/characterID/447073625/
     # https://images.evetech.net/characters/1338057886
@@ -30,7 +33,7 @@ class Player:
         try:
             db.Characters.insert_one(character)
         except Exception:
-            1==1#db.Characters.update_one(character,upsert=True)
+            1 == 1  # db.Characters.update_one(character,upsert=True)
 
     @staticmethod
     def store_players(characters: list):
@@ -38,26 +41,12 @@ class Player:
         try:
             db.Characters.insert_many(characters)
         except Exception:
-            1==1#db.Characters.update_many(characters,upsert=True)
-            
-        
-        
+            1 == 1  # db.Characters.update_many(characters,upsert=True)
 
 
-    def __init__(self, name: str):
-        """Create Single Character"""
+    def __init__(self, name: str, char_id: str):
+        """Create Single Character, from list of multiple from systemreport"""
         self.name = name
-
-        # Set up our request
-        headers = {}
-        headers["accept"] = "application/json"
-        headers["Accept-Language"] = "en"
-        headers["Content-Type"] = "application/json"
-        headers["Cache-Control"] = "no-cache"
-        data = '["{chname}"]'.format(chname=name)
-
-        resp = requests.post(self.id_url, headers=headers, data=data)
-        char_id = json.loads(resp.text)["characters"][0]["id"]
         self.char_id = char_id
 
     async def get_deaths(self, recent=5):
@@ -127,29 +116,28 @@ class Player:
             self.isk_killed = 0
             self.danger = 0
 
-
-
         return 1
 
     def as_json(self):
         """Function to return as a dict/json for MondoDB storage"""
-        return{
-            "_id":self.char_id,
-            "name":self.name,
-            "danger":self.danger,
-            "isk_killed":self.isk_killed,
-            "corp_id":self.corp_id,
-            "alliance_id":self.alliance_id,
-            "common_ships":self.common_ships,
-            "common_systems":self.common_systems,
-            "common_ship_typs":self.common_ship_types,
-            "sec_status":self.sec_status
+        return {
+            "_id": self.char_id,
+            "name": self.name,
+            "danger": self.danger,
+            "isk_killed": self.isk_killed,
+            "corp_id": self.corp_id,
+            "alliance_id": self.alliance_id,
+            "common_ships": self.common_ships,
+            "common_systems": self.common_systems,
+            "common_ship_typs": self.common_ship_types,
+            "sec_status": self.sec_status
         }
 
+    def __hash__(self):
+        """Allowing us to hash the player class in a dict"""
+        return self.char_id
 
+    def __str__(self):
+        return self.name
 
-p = Player("Spencer Anders")
-print(p.get_stats())
-print(p.common_ships)
-Player.store_player(p.as_json())
 

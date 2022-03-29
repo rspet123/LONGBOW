@@ -11,6 +11,7 @@ import hmac
 import hashlib
 import eve_data_tools
 from Player import Player
+from SystemReport import SystemReport
 
 # https://zkillboard.com/api/kills/characterID/447073625/
 
@@ -93,14 +94,8 @@ def post_system_report():
     chars_in_system = request.form['characters'].splitlines()
     dscan = request.form['dscan']
     print(chars_in_system)
-    char_list = []
-    for char in chars_in_system:
-        add_char = Player(char)
-        add_char.common_systems[sys_name_to_id[sys_name]["system_id"]] = add_char.common_systems.get(
-            sys_name_to_id[sys_name]["system_id"], 0) + 1
-        stats = add_char.get_stats()
-        char_list.append(add_char)
-        print(add_char.common_ships)
+    report = SystemReport(chars_in_system,sys_name,sys_name_to_id[sys_name]["system_id"])
+    report.get_player_ids()
     near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,sys_name_to_id[sys_name]["system_id"],5)
     out = ""
     for drifter in near_drifters:
