@@ -10,7 +10,7 @@ import random
 import hmac
 import hashlib
 import eve_data_tools
-
+from Player import Player
 # https://zkillboard.com/api/kills/characterID/447073625/
 
 
@@ -22,7 +22,10 @@ SECRET_KEY = config.get('ESI', 'SECRET_KEY')
 CALLBACK = config.get('ESI', 'CALLBACK')
 USER_AGENT = config.get('ESI', 'USER_AGENT')
 
-
+system_data = eve_data_tools.get_system_data()
+system_data = eve_data_tools.get_system_jumps(system_data)
+drifters = eve_data_tools.get_possible_drifter_systems()
+sys_name_to_id = eve_data_tools.get_system_data_by_name()
 def generate_token():
     """Generate OAuth token"""
     chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
@@ -74,6 +77,25 @@ def login():
 def hello_world():
     return 'WIP'
 
+@app.get('/system_report')
+def system_report():
+    return render_template('system_report.html')
+
+@app.post('/system_report')
+def post_system_report():
+    sys_name = request.form['system']
+    chars_in_system = request.form['characters'].splitlines()
+    dscan = request.form['dscan']
+    print(chars_in_system)
+    char_list = []
+    for char in chars_in_system:
+        add_char = Player(char)
+        add_char.common_systems[sys_name_to_id[sys_name]["system_id"]] = add_char.common_systems.get(sys_name_to_id[sys_name]["system_id"],0)+1
+        stats = add_char.get_stats()
+        char_list.append(add_char)
+        print(add_char.common_ships)
+    return sys_name
+
 
 @app.get('/stats')
 def stats():
@@ -88,7 +110,8 @@ def stats():
         location = esiclient.request(op)
         print(str(location.data))
         system_id = location.data.solar_system_id
-        return str(system_id)
+        output = eve_data_tools.get_nearest_drifter_systems(drifters,system_data,str(system_id),5)
+        return output
     else:
         return redirect(url_for("login"))
 
@@ -106,7 +129,6 @@ def callback():
     except APIException as e:
         return 'Login EVE Online SSO failed: %s' % e, 403
     character_data = esisecurity.verify()
-    print(character_data)
     data_store["character_data"] = character_data
 
     return redirect(url_for("stats"))
