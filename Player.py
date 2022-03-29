@@ -117,9 +117,15 @@ class Player:
             print(ship)
             self.common_ship_types[str(ship["groupID"])] = str(ship["kills"])
             self.common_ships[str(ship["shipTypeID"])] = str(ship["kills"])
-        self.isk_lost = stats_data["iskLost"]
-        self.isk_killed = stats_data["iskDestroyed"]
-        self.danger = stats_data["dangerRatio"]
+        try:
+            self.isk_lost = stats_data["iskLost"]
+            self.isk_killed = stats_data["iskDestroyed"]
+            self.danger = stats_data["dangerRatio"]
+        except KeyError:
+            # No key? Default values
+            self.isk_lost = 0
+            self.isk_killed = 0
+            self.danger = 0
 
 
 
