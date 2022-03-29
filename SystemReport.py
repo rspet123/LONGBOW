@@ -9,7 +9,8 @@ class systemreport:
     system_id = ""
     time = ""
     ships = {}
-
+    # TODO have the system report object build the list of player objects from the call
+    # We supply it with the list of names and it should do the rest
 
     def __init__(self, players: list,system_name: str,system_id:str, time = datetime.now()):
         self.players = players
