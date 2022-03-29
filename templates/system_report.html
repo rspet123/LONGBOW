@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>System Report</title>
+</head>
+<body>
+<form action="{{ url_for('post_system_report') }}" method="post">
+    <label for="system">System:</label>
+    <input type="text" name="system">
+    <label for="characters">Characters:</label>
+    <textarea name="characters" cols="50" rows="5"></textarea>
+    <label for="dscan">DSCAN:</label>
+    <textarea name="dscan" cols="50" rows="5"></textarea>
+    <input type="submit">
+</form>
+</body>
+</html>
