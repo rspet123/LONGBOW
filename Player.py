@@ -30,10 +30,7 @@ class Player:
     @staticmethod
     def store_player(character: dict):
         # TODO Fix upsert etc
-        try:
-            db.Characters.insert_one(character)
-        except Exception:
-            1 == 1  # db.Characters.update_one(character,upsert=True)
+        db.Characters.update({"_id":character["_id"]},character,upsert=True)
 
     @staticmethod
     def store_players(characters: list):
@@ -97,15 +94,21 @@ class Player:
         except KeyError:
             self.corp_id = "98494816"
             self.alliance_id = "99005678"
-        # Add common Systems
-        for system in stats_data["topLists"][4]["values"]:
-            print(system)
-            self.common_systems[str(system["solarSystemID"])] = system["kills"]
+        # TODO zkill api integration is busted
         # Add common Ships
-        for ship in stats_data["topLists"][3]["values"]:
-            print(ship)
-            self.common_ship_types[str(ship["groupID"])] = str(ship["kills"])
-            self.common_ships[str(ship["shipTypeID"])] = str(ship["kills"])
+        try:
+            # Add common Systems
+            for system in stats_data["topLists"][4]["values"]:
+                print(system)
+                self.common_systems[str(system["solarSystemID"])] = system["kills"]
+            for ship in stats_data["topLists"][3]["values"]:
+                print(ship)
+                self.common_ship_types[str(ship["groupID"])] = str(ship["kills"])
+                self.common_ships[str(ship["shipTypeID"])] = str(ship["kills"])
+        except KeyError:
+            self.common_ship_types["NA"] = str({})
+            self.common_ships["NA"] = str({})
+            self.common_systems["NA"] = str({})
         try:
             self.isk_lost = stats_data["iskLost"]
             self.isk_killed = stats_data["iskDestroyed"]

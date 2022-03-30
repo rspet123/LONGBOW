@@ -4,6 +4,7 @@ from flask import Flask, request, session, url_for, render_template, redirect
 # import esipy
 from esipy import EsiApp, EsiSecurity, EsiClient
 from esipy.exceptions import APIException
+from datetime import datetime, timezone
 # import pickle
 import configparser
 import random
@@ -89,13 +90,13 @@ def system_report():
 
 @app.post('/system_report')
 def post_system_report():
-    # TODO Have this generate an actual SystemReport object
     sys_name = request.form['system']
     chars_in_system = request.form['characters'].splitlines()
     dscan = request.form['dscan']
     print(chars_in_system)
-    report = SystemReport(chars_in_system,sys_name,sys_name_to_id[sys_name]["system_id"])
+    report = SystemReport(chars_in_system,sys_name,sys_name_to_id[sys_name]["system_id"],datetime.now(timezone.utc))
     report.get_player_ids()
+    report.store_report()
     near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,sys_name_to_id[sys_name]["system_id"],5)
     out = ""
     for drifter in near_drifters:

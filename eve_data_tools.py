@@ -133,17 +133,3 @@ def get_nearest_drifter_systems(drifters: list, system_data: dict, system: str, 
                 if gate not in visited:
                     queue.append((system_data[gate]["gates"], system[1] + 1))
                     visited.append(gate)
-
-
-#name_data = get_system_data_by_name()
-#sysdata = get_system_jumps(get_system_data())
-# print(get_system_distance(sysdata, name_data["1DQ1-A"]["system_id"], name_data["T5ZI-S"]["system_id"]))
-#print(get_path_to_system(sysdata, name_data["1DQ1-A"]["system_id"], name_data["Jita"]["system_id"]))
-#Player_1 = Player("Spencer Anders")
-
-#print(Player_1.get_kills())
-#print(Player_1.get_deaths())
-#print(name_data["1DQ1-A"])
-#drifter_systems_nearby = get_nearest_drifter_systems(get_possible_drifter_systems(),sysdata,name_data["EH2I-P"]["system_id"],3)
-#for system in drifter_systems_nearby:
-#    print(sysdata[str(system)]["name"])
