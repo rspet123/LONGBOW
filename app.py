@@ -80,8 +80,37 @@ def login():
 
 @app.route('/')
 def hello_world():
+
     return 'WIP'
 
+# TODO I NEED HTML FOR ALL THIS UGH
+# https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
+
+@app.route('/menu')
+def menu():
+
+    return 'WIP'
+
+@app.route('/characters')
+def characters():
+    # TODO query db for characters
+    return 'WIP'
+
+@app.route('/systems')
+def systems():
+    # TODO query db for systems
+    return 'WIP'
+
+@app.route('/report_viewer')
+def report_viewer():
+    # TODO query db for reports
+    return 'WIP'
+
+
+@app.route('/targets')
+def targets():
+
+    return 'WIP'
 
 @app.get('/system_report')
 def system_report():
