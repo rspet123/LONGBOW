@@ -66,7 +66,7 @@ class SystemReport:
             player.get_stats()
             pjson = player.as_json()
             print(pjson)
-            db.Characters.insert_one(pjson)
+            db.Characters.update_one({"_id": pjson["_id"]}, { "$set":pjson}, upsert=True)
 
     def __del__(self):
         self.player_objects = []
