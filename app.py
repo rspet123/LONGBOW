@@ -80,8 +80,36 @@ def login():
 
 @app.route('/')
 def hello_world():
+
     return 'WIP'
 
+# TODO I NEED HTML FOR ALL THIS UGH
+
+@app.route('/menu')
+def hello_world():
+
+    return 'WIP'
+
+@app.route('/characters')
+def hello_world():
+    # TODO query db for characters
+    return 'WIP'
+
+@app.route('/systems')
+def hello_world():
+    # TODO query db for systems
+    return 'WIP'
+
+@app.route('/report_viewer')
+def hello_world():
+    # TODO query db for reports
+    return 'WIP'
+
+
+@app.route('/targets')
+def hello_world():
+
+    return 'WIP'
 
 @app.get('/system_report')
 def system_report():

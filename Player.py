@@ -1,6 +1,6 @@
 import requests
 import json
-
+from datetime import datetime, timezone
 import db
 
 
@@ -13,6 +13,7 @@ class Player:
     recent_deaths = []
     recent_kills = []
     kill_hashes = []
+    last_seen = ""
     common_systems = {}
     cap_pilot = False
     char_id = ""
@@ -45,6 +46,7 @@ class Player:
         """Create Single Character, from list of multiple from systemreport"""
         self.name = name
         self.char_id = char_id
+        self.last_seen = datetime.now(timezone.utc)
 
     async def get_deaths(self, recent=5):
         """Async calls to get deaths from zkb"""
@@ -133,7 +135,8 @@ class Player:
             "common_ships": self.common_ships,
             "common_systems": self.common_systems,
             "common_ship_typs": self.common_ship_types,
-            "sec_status": self.sec_status
+            "sec_status": self.sec_status,
+            "last_seen":self.last_seen
         }
 
     def __hash__(self):
