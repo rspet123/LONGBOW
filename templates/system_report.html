@@ -5,14 +5,20 @@
     <title>System Report</title>
 </head>
 <body>
-<li><a href="{{ url_for('index') }}">Menu</a></li>
+<a href="{{ url_for('index') }}">Menu</a>
 <form action="{{ url_for('post_system_report') }}" method="post">
     <label for="system">System:</label>
-    <input type="text" name="system">
+    <label>
+        <input type="text" name="system">
+    </label>
     <label for="characters">Characters:</label>
-    <textarea name="characters" cols="50" rows="5"></textarea>
+    <label>
+        <textarea name="characters" cols="50" rows="5"></textarea>
+    </label>
     <label for="dscan">DSCAN:</label>
-    <textarea name="dscan" cols="50" rows="5"></textarea>
+    <label>
+        <textarea name="dscan" cols="50" rows="5"></textarea>
+    </label>
     <input type="submit">
 </form>
 </body>

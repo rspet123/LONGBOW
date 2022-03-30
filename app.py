@@ -80,37 +80,39 @@ def login():
 
 @app.route('/')
 def index():
-
     return render_template('menu.html')
+
 
 # TODO I NEED HTML FOR ALL THIS UGH
 # https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
 
 @app.route('/menu')
 def menu():
-
     return render_template('menu.html')
+
 
 @app.route('/characters')
 def characters():
     # TODO query db for characters
-    return 'WIP'
+    return render_template('characters.html')
+
 
 @app.route('/systems')
 def systems():
     # TODO query db for systems
-    return 'WIP'
+    return render_template('systems.html')
+
 
 @app.route('/report_viewer')
 def report_viewer():
     # TODO query db for reports
-    return 'WIP'
+    return render_template('view_system_reports.html')
 
 
 @app.route('/targets')
 def targets():
-
     return 'WIP'
+
 
 @app.get('/system_report')
 def system_report():
@@ -123,10 +125,11 @@ def post_system_report():
     chars_in_system = request.form['characters'].splitlines()
     dscan = request.form['dscan']
     print(chars_in_system)
-    report = SystemReport(chars_in_system,sys_name,sys_name_to_id[sys_name]["system_id"],datetime.now(timezone.utc))
+    report = SystemReport(chars_in_system, sys_name, sys_name_to_id[sys_name]["system_id"], datetime.now(timezone.utc))
     report.get_player_ids()
     report.store_report()
-    near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,sys_name_to_id[sys_name]["system_id"],5)
+    near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,
+                                                               sys_name_to_id[sys_name]["system_id"], 5)
     out = ""
     for drifter in near_drifters:
         out += system_data[drifter]["name"] + ", "
