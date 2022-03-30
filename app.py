@@ -79,9 +79,9 @@ def login():
 
 
 @app.route('/')
-def hello_world():
+def index():
 
-    return 'WIP'
+    return render_template('menu.html')
 
 # TODO I NEED HTML FOR ALL THIS UGH
 # https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
@@ -89,7 +89,7 @@ def hello_world():
 @app.route('/menu')
 def menu():
 
-    return 'WIP'
+    return render_template('menu.html')
 
 @app.route('/characters')
 def characters():

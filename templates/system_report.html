@@ -5,6 +5,7 @@
     <title>System Report</title>
 </head>
 <body>
+<li><a href="{{ url_for('index') }}">Menu</a></li>
 <form action="{{ url_for('post_system_report') }}" method="post">
     <label for="system">System:</label>
     <input type="text" name="system">
