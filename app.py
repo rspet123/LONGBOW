@@ -150,7 +150,7 @@ def stats():
         print(str(location.data))
         system_id = location.data.solar_system_id
         output = eve_data_tools.get_nearest_drifter_systems(drifters, system_data, str(system_id), 5)
-        return output
+        return str(output)
     else:
         return redirect(url_for("login"))
 
