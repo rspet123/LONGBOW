@@ -94,12 +94,9 @@ def menu():
 
 @app.route('/characters')
 def characters():
+    #https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
     character_list = db.Characters.find()
-    out = ""
-    for char in character_list:
-        print(char["_id"])
-        out = out + char["_id"]
-    return render_template('characters.html')
+    return render_template('characters.html',character_list = character_list)
 
 @app.route('/characters/character/<name>')
 def character(name):

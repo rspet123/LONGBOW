@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <title>{{character['_id']}}</title>
 </head>
-<body>
-
-NAME: {{character['_id']}}
-ID: {{character['name']}}
-</body>
+    <body>
+        <a href="{{ url_for('index') }}">Menu</a>
+        <a href="{{ url_for('characters') }}">Back</a>
+        <ul class="menu">
+            <li>NAME: {{character['_id']}}</li>
+            <li>ID: {{character['name']}}</li>
+        </ul>
+    </body>
 </html>

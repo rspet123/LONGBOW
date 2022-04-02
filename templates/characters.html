@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>Characters</title>
 </head>
-<body>
-<a href="{{ url_for('index') }}">Menu</a>
-Characters
-</body>
+    <body>
+    <a href="{{ url_for('index') }}">Menu</a>
+    Characters
+        <ul class="menu">
+        {%- for character in character_list %}
+            <li><a href="{{ url_for('character',name = character["_id"]) }}">{{ character["_id"]}}</a></li>
+        {% endfor %}
+        </ul>
+    </body>
 </html>
