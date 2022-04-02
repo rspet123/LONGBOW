@@ -83,6 +83,7 @@ class Player:
     def get_stats(self):
         """Gathers stats from zKillboard's API"""
         # We need to cast all ints etc to strings for storage on mongodb
+        # TODO Really fix this
         try:
             response = requests.get("https://zkillboard.com/api/stats/characterID/{id}/".format(id=self.char_id))
             stats_data = json.loads(response.text)

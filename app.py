@@ -103,6 +103,7 @@ def characters():
 
 @app.route('/characters/character/<name>')
 def character(name):
+    # TODO add functionality
     character = db.Characters.find_one({"_id":name})
     print(character)
     return render_template('character.html',character = character)
