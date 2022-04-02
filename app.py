@@ -101,6 +101,11 @@ def characters():
         out = out + char["_id"]
     return render_template('characters.html')
 
+@app.route('/characters/character/<name>')
+def character(name):
+    character = db.Characters.find_one({"_id":name})
+    print(character)
+    return render_template('character.html',character = character)
 
 @app.route('/systems')
 def systems():
