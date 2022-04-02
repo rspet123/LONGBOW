@@ -11,6 +11,7 @@ import random
 import hmac
 import hashlib
 import eve_data_tools
+import db
 from Player import Player
 from SystemReport import SystemReport
 
@@ -93,7 +94,11 @@ def menu():
 
 @app.route('/characters')
 def characters():
-    # TODO query db for characters
+    character_list = db.Characters.find()
+    out = ""
+    for char in character_list:
+        print(char["_id"])
+        out = out + char["_id"]
     return render_template('characters.html')
 
 
