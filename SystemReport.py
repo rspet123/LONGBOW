@@ -17,8 +17,6 @@ class SystemReport:
     ships = {}
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
 
-    # TODO have the system report object build the list of player objects from the call
-    # We supply it with the list of names and it should do the rest
 
     def __init__(self, players: list, system_name: str, system_id: str, time=datetime.now(timezone.utc)):
         self.players = players

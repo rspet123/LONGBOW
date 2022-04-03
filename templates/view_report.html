@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{report["system_name"]}} at {{ report["time"] }}</title>
 </head>
     <body>
+    <button onclick="history.back()">Go Back</button>
+    System: {{report["system_name"]}} at {{ report["time"] }}
     {%- for player in report["player_ids"] %}
         <li><a href="{{ url_for('character',name = player) }}">{{player}}</a></li>
     {% endfor %}
