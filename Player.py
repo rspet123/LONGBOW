@@ -23,6 +23,7 @@ class Player:
     recent_kills = 0
     sec_status = 0
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
+    notes = []
 
     # TODO add images
     # https://zkillboard.com/api/stats/characterID/447073625/
@@ -47,6 +48,7 @@ class Player:
         self.name = name
         self.char_id = char_id
         self.last_seen = datetime.now(timezone.utc)
+        self.notes = []
 
     async def get_deaths(self, recent=5):
         """Async calls to get deaths from zkb"""
@@ -137,7 +139,8 @@ class Player:
             "common_systems": self.common_systems,
             "common_ship_typs": self.common_ship_types,
             "sec_status": self.sec_status,
-            "last_seen":self.last_seen
+            "last_seen":self.last_seen,
+            "notes":self.notes
         }
 
     def __hash__(self):

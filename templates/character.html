@@ -7,9 +7,27 @@
     <body>
         <a href="{{ url_for('index') }}">Menu</a>
         <a href="{{ url_for('characters') }}">Back</a>
+        <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt={{character['_id']}}>
         <ul class="menu">
             <li>NAME: {{character['_id']}}</li>
             <li>ID: {{character['name']}}</li>
+            <li><a href="{{"https://zkillboard.com/character/" + character["_id"] + "/" }}">zKill</a></li>
+            <li>Notes:</li>
+                <ul>
+                {%- for note in character['notes'] %}
+                    <li>{{ note }}</li>
+                {% endfor %}
+                </ul>
+
+        <form action="{{ url_for('post_comment',name=character['_id']) }}" method="post">
+    <label for="note">Comment:</label>
+    <label>
+        <textarea name="note" cols="50" rows="5"></textarea>
+    </label>
+    <input type="submit">
+</form>
+
+
         </ul>
     </body>
 </html>

@@ -44,7 +44,7 @@ class SystemReport:
             curr_char = Player(char_id["id"], char_id["name"])
             curr_char.common_systems[self.system_id] = curr_char.common_systems.get(self.system_id, 0) + 1
             self.player_objects.append(curr_char)
-            self.player_ids.append(char_id["id"])
+            self.player_ids.append(char_id["name"])
 
     def as_json(self):
         """Returns a json for mongodb"""

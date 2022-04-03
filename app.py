@@ -94,16 +94,38 @@ def menu():
 
 @app.route('/characters')
 def characters():
-    #https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
     character_list = db.Characters.find()
-    return render_template('characters.html',character_list = character_list)
+    return render_template('characters.html', character_list=character_list)
 
-@app.route('/characters/character/<name>')
+
+@app.route('/characters/character_name/<name>')
 def character(name):
     # TODO add functionality
-    character = db.Characters.find_one({"_id":name})
+    character = db.Characters.find_one({"_id": name})
     print(character)
-    return render_template('character.html',character = character)
+    return render_template('character.html', character=character)
+
+@app.route('/characters/character_id/<id>')
+def character_id(id):
+    # TODO add functionality
+    character = db.Characters.find_one({"name": id})
+    print(character)
+    return render_template('character.html', character=character)
+
+@app.post('/characters/character_name/<name>/comment')
+def post_comment(name):
+    # TODO add functionality
+    comment = request.form['note']
+    character = db.Characters.find_one({"_id": name})
+    print(character)
+    print(type(character))
+    #Update Character
+    if character["notes"] is None:
+        character["notes"] = []
+    character["notes"].append(comment)
+    #Put it back
+    db.Characters.update_one({"_id": character["_id"]}, { "$set":character}, upsert=True)
+    return render_template('character.html', character=character)
 
 @app.route('/systems')
 def systems():
@@ -114,16 +136,24 @@ def systems():
 @app.route('/report_viewer')
 def report_viewer():
     # TODO query db for reports
-    return render_template('view_system_reports.html')
+    reports = db.SystemReport.find()
+    return render_template('view_system_reports.html',reports=reports)
+
+
+@app.route('/report/<id>')
+def report(id):
+    # TODO query db for reports
+    report = db.SystemReport.find_one({"_id":id})
+    return render_template('view_report.html',report = report)
 
 
 @app.route('/targets')
 def targets():
     return 'WIP'
 
-
 @app.get('/system_report')
 def system_report():
+    """file system report"""
     return render_template('system_report.html')
 
 

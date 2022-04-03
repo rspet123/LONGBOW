@@ -8,13 +8,19 @@ class System:
     z = 0
     common_players = {}
     gates = []
+    nearest_drifters = []
 
-    def __init__(self, sysdata: dict, system_id: str):
+    def __init__(self, sys_name_data: dict, name: str,players:list):
         """Create system by ID"""
         # TODO
-        self.system_id = system_id
+        self.name = name
+        self.system_id = sys_name_data[name]["system_id"]
+        for player in players:
+            self.common_players[player] = self.common_players.get(player,0)+1
 
-    def __init__(self, sysdata_id: dict):
-        """Create system by dict out of sysdata"""
-        # TODO
-        self.system_id = 1
+    def as_json(self):
+        return{
+            "name":self.name,
+            "system_id":self.system_id,
+            "common_players":self.common_players
+        }

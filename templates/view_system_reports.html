@@ -7,5 +7,12 @@
 <body>
 <a href="{{ url_for('index') }}">Menu</a>
 System Report
+<ul class="menu">
+        {%- for report in reports %}
+            <li>{{report["system_name"]}} at {{ report["time"] }}</li>
+            {{report["player_ids"]|length}} players in system
+            <a href="{{ url_for('report',id = report["_id"]) }}">{{ report["system_name"]}}</a>
+        {% endfor %}
+        </ul>
 </body>
 </html>
