@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
     <meta charset="UTF-8">
     <title>LONGBOW</title>
 </head>
   <body>
     <header>
       <div class="container">
-        <h1 class="logo">LONGBOW</h1>
-        <h1 class="logo">Menu</h1>
+        <h1 class="main_title">LONGBOW</h1>
+        <h2 class="logo">Menu</h2>
           <ul class="menu">
               <li><a href="{{ url_for('system_report') }}">System Report</a></li>
               <li><a href="{{ url_for('login') }}">Login</a></li>

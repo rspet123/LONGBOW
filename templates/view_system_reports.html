@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>System Reports</title>
-</head>
-<body>
-<a href="{{ url_for('index') }}">Menu</a>
-System Report
-<ul class="menu">
-        {%- for report in reports %}
-            <li>{{report["system_name"]}} at {{ report["time"] }}</li>
-            {{report["player_ids"]|length}} players in system
-            <a href="{{ url_for('report',id = report["_id"]) }}">{{ report["system_name"]}}</a>
-        {% endfor %}
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+        <meta charset="UTF-8">
+        <title>System Reports</title>
+    </head>
+    <body>
+    <a href="{{ url_for('index') }}">Menu</a>
+    System Report
+        <ul class="menu">
+            {%- for report in reports %}
+                <div class="dropdown">
+                    <li><a href="{{ url_for('report',id = report["_id"]) }}">{{report["system_name"]}} at {{ report["time"] }}</a></li>
+                    <div class="dropdown-content">
+                        <p>{{report["player_ids"]|length}} players in system</p>
+                    </div>
+                </div>
+            {% endfor %}
         </ul>
-</body>
+    </body>
 </html>

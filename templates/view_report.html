@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+    <meta charset="UTF-8">-
     <title>{{report["system_name"]}} at {{ report["time"] }}</title>
 </head>
     <body>
     <button onclick="history.back()">Go Back</button>
     System: {{report["system_name"]}} at {{ report["time"] }}
+    <ul class="menu">
     {%- for player in report["player_ids"] %}
         <li><a href="{{ url_for('character',name = player) }}">{{player}}</a></li>
     {% endfor %}
+    </ul>
     </body>
 </html>

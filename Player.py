@@ -144,7 +144,7 @@ class Player:
         }
 
     def __hash__(self):
-        """Allowing us to hash the player class in a dict"""
+        """Allows us to hash the player class in a dict"""
         return self.char_id
 
     def __str__(self):
