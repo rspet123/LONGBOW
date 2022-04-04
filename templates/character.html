@@ -8,12 +8,15 @@
     <body>
         <a href="{{ url_for('index') }}">Menu</a>
         <button onclick="history.back()">Go Back</button>
+        <br>
         <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt={{character['_id']}}>
         <ul class="menu">
             <li>NAME: {{character['_id']}}</li>
             <li>ID: {{character['name']}}</li>
             <li><a href="{{"https://zkillboard.com/character/" + character["_id"] + "/" }}">zKill</a></li>
             <li><a href="{{"https://evewho.com/character/" + character["name"]|string}}">EveWho</a></li>
+            <li>Last Seen at: {{character['last_seen']}}</li>
+            <li><a href="{{ url_for('system',name = character['last_system']) }}">In System: {{character['last_system']}}</a></li>
             <li>Notes:</li>
                 <ul>
                 {%- for note in character['notes'] %}

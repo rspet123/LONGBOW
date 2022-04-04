@@ -22,6 +22,7 @@ class Player:
     danger = 0
     num_recent_kills = 0
     sec_status = 0
+    last_system = ""
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
     notes = []
 
@@ -43,12 +44,13 @@ class Player:
             1 == 1  # db.Characters.update_many(characters,upsert=True)
 
 
-    def __init__(self, name: str, char_id: str):
+    def __init__(self, name: str, char_id: str,last_system:str):
         """Create Single Character, from list of multiple from systemreport"""
         self.name = name
         self.char_id = char_id
         self.last_seen = datetime.now(timezone.utc)
         self.notes = []
+        self.last_system = last_system
 
     async def get_deaths(self, recent=5):
         """Async calls to get deaths from zkb"""
@@ -140,7 +142,8 @@ class Player:
             "common_ship_typs": self.common_ship_types,
             "sec_status": self.sec_status,
             "last_seen":self.last_seen,
-            "notes":self.notes
+            "notes":self.notes,
+            "last_system":self.last_system
         }
 
     def __hash__(self):

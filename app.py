@@ -192,10 +192,8 @@ def post_system_report():
     report.store_report()
     near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,
                                                                sys_name_to_id[sys_name]["system_id"], 5)
-    out = ""
-    for drifter in near_drifters:
-        out += system_data[drifter]["name"] + ", "
-    return out
+
+    return render_template('view_report.html', report=report.as_json())
 
 
 @app.get('/stats')
