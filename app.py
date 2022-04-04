@@ -103,7 +103,7 @@ def character(name):
     # TODO add functionality
     character = db.Characters.find_one({"_id": name})
     print(character)
-    return render_template('character.html', character=character,sys_name = sys_name_to_id)
+    return render_template('character.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.route('/characters/character_id/<id>')
@@ -111,7 +111,7 @@ def character_id(id):
     # TODO add functionality
     character = db.Characters.find_one({"name": id})
     print(character)
-    return render_template('character.html', character=character,sys_name = sys_name_to_id)
+    return render_template('character.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.post('/characters/character_name/<name>/comment')
@@ -127,7 +127,7 @@ def post_comment(name):
     character["notes"].append(comment)
     # Put it back
     db.Characters.update_one({"_id": character["_id"]}, {"$set": character}, upsert=True)
-    return render_template('character.html', character=character,sys_name = sys_name_to_id)
+    return render_template('character.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.route('/systems')
@@ -135,14 +135,21 @@ def systems():
     system_list = db.Systems.find()
     return render_template('systems.html', system_list=system_list)
 
+
+# TODO add list of reports to the system page
 @app.get('/systems/system/<name>')
 def system(name):
-    system = db.Systems.find_one({"_id":name})
+    system = db.Systems.find_one({"_id": name})
     drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
-                                                          system_data,
-                                                          sys_name_to_id[system["_id"]]["system_id"],
-                                                          5)
-    return render_template('system.html', system=system,drifters = drifter_systems,sys_data = system_data, last_dist = str(5))
+                                                                 system_data,
+                                                                 sys_name_to_id[system["_id"]]["system_id"],
+                                                                 5)
+    return render_template('system.html',
+                           system=system,
+                           drifters=drifter_systems,
+                           sys_data=system_data,
+                           last_dist=str(5))
+
 
 @app.post('/systems/system/<name>')
 def adjust_system_jumps(name):
@@ -153,7 +160,8 @@ def adjust_system_jumps(name):
                                                                  sys_name_to_id[system["name"]]["system_id"],
                                                                  int(jumps))
     print(int(jumps))
-    return render_template('system.html', system=system, drifters = drifter_systems,sys_data=system_data,last_dist = str(jumps))
+    return render_template('system.html', system=system, drifters=drifter_systems, sys_data=system_data,
+                           last_dist=str(jumps))
 
 
 @app.route('/report_viewer')
