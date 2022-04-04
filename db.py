@@ -19,3 +19,4 @@ Characters = db["Characters"]
 if drop_tables:
     Characters.delete_many({})
     SystemReport.delete_many({})
+    Systems.delete_many({})

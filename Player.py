@@ -20,7 +20,7 @@ class Player:
     isk_killed = 0
     isk_lost = 0
     danger = 0
-    recent_kills = 0
+    num_recent_kills = 0
     sec_status = 0
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
     notes = []

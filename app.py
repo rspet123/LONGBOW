@@ -105,12 +105,14 @@ def character(name):
     print(character)
     return render_template('character.html', character=character)
 
+
 @app.route('/characters/character_id/<id>')
 def character_id(id):
     # TODO add functionality
     character = db.Characters.find_one({"name": id})
     print(character)
     return render_template('character.html', character=character)
+
 
 @app.post('/characters/character_name/<name>/comment')
 def post_comment(name):
@@ -119,37 +121,59 @@ def post_comment(name):
     character = db.Characters.find_one({"_id": name})
     print(character)
     print(type(character))
-    #Update Character
+    # Update Character
     if character["notes"] is None:
         character["notes"] = []
     character["notes"].append(comment)
-    #Put it back
-    db.Characters.update_one({"_id": character["_id"]}, { "$set":character}, upsert=True)
+    # Put it back
+    db.Characters.update_one({"_id": character["_id"]}, {"$set": character}, upsert=True)
     return render_template('character.html', character=character)
+
 
 @app.route('/systems')
 def systems():
-    # TODO query db for systems
-    return render_template('systems.html')
+    system_list = db.Systems.find()
+    return render_template('systems.html', system_list=system_list)
+
+@app.get('/systems/system/<name>')
+def system(name):
+    system = db.Systems.find_one({"_id":name})
+    drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
+                                                          system_data,
+                                                          sys_name_to_id[system["_id"]]["system_id"],
+                                                          5)
+    return render_template('system.html', system=system,drifters = drifter_systems,sys_data = system_data, last_dist = str(5))
+
+@app.post('/systems/system/<name>')
+def adjust_system_jumps(name):
+    jumps = request.form['drifter_jumps']
+    system = db.Systems.find_one({"_id": name})
+    drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
+                                                                 system_data,
+                                                                 sys_name_to_id[system["name"]]["system_id"],
+                                                                 int(jumps))
+    print(int(jumps))
+    return render_template('system.html', system=system, drifters = drifter_systems,sys_data=system_data,last_dist = str(jumps))
 
 
 @app.route('/report_viewer')
 def report_viewer():
     # TODO query db for reports
     reports = db.SystemReport.find()
-    return render_template('view_system_reports.html',reports=reports)
+    return render_template('view_system_reports.html', reports=reports)
 
 
 @app.route('/report/<id>')
 def report(id):
     # TODO query db for reports
-    report = db.SystemReport.find_one({"_id":id})
-    return render_template('view_report.html',report = report)
+    report = db.SystemReport.find_one({"_id": id})
+    return render_template('view_report.html', report=report)
 
 
 @app.route('/targets')
 def targets():
     return 'WIP'
+
 
 @app.get('/system_report')
 def system_report():

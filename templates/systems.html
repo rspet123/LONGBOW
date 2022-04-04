@@ -5,8 +5,13 @@
     <meta charset="UTF-8">
     <title>Systems</title>
 </head>
-<body>
-<a href="{{ url_for('index') }}">Menu</a>
-Systems
-</body>
+    <body>
+    <a href="{{ url_for('index') }}">Menu</a>
+    <h1>Systems</h1>
+    <ul class="menu">
+        {%- for system in system_list %}
+            <li><a href="{{ url_for('system',name = system["name"]) }}">{{system["name"]}}</a></li>
+        {% endfor %}
+    </ul>
+    </body>
 </html>

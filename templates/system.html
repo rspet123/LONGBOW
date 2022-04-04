@@ -6,9 +6,25 @@
     <title>Title</title>
 </head>
 <body>
-<form action="{{ url_for('post_system_report') }}" method="post">
+<a href="{{ url_for('index') }}">Menu</a>
+<h1>{{ system["name"] }}</h1>
+<h2>Players Seen</h2>
+<ul>
+    {% for player in system["common_players"] %}
+            <li><a href="{{ url_for('character',name = player) }}">{{ player }}:{{ system["common_players"][player] }}</a></li>
+    {% endfor %}
+</ul>
+<h2>Nearby Jove Observatories</h2>
+<ul>
+    {%- for drifter in drifters %}
+        <li>{{ sys_data[drifter]["name"] }}</li>
+    {% endfor %}
+</ul>
+<h2>Max Distance To Observatories: {{ last_dist }} Jumps</h2>
+<form action="{{ url_for('adjust_system_jumps',name = system["name"]) }}" method="post">
     <div class="slidecontainer">
-      <input type="range" min="1" max="8" value="3" class="slider" id="drifter_jumps">
+        <input type="range" name="drifter_jumps" min="1" max="8" value={{ last_dist }} class="slider" id="drifter_jumps">
+        <input type="submit">
     </div>
 </form>
 
