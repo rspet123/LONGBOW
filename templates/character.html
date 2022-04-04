@@ -17,6 +17,7 @@
             <li><a href="{{"https://evewho.com/character/" + character["name"]|string}}">EveWho</a></li>
             <li>Last Seen at: {{character['last_seen']}}</li>
             <li><a href="{{ url_for('system',name = character['last_system']) }}">In System: {{character['last_system']}}</a></li>
+            <li><a href="{{ url_for('report',id =  character['last_report'])}}">Report</a></li>
             <li>Notes:</li>
                 <ul>
                 {%- for note in character['notes'] %}

@@ -103,7 +103,7 @@ def character(name):
     # TODO add functionality
     character = db.Characters.find_one({"_id": name})
     print(character)
-    return render_template('character.html', character=character)
+    return render_template('character.html', character=character,sys_name = sys_name_to_id)
 
 
 @app.route('/characters/character_id/<id>')
@@ -111,7 +111,7 @@ def character_id(id):
     # TODO add functionality
     character = db.Characters.find_one({"name": id})
     print(character)
-    return render_template('character.html', character=character)
+    return render_template('character.html', character=character,sys_name = sys_name_to_id)
 
 
 @app.post('/characters/character_name/<name>/comment')
@@ -127,7 +127,7 @@ def post_comment(name):
     character["notes"].append(comment)
     # Put it back
     db.Characters.update_one({"_id": character["_id"]}, {"$set": character}, upsert=True)
-    return render_template('character.html', character=character)
+    return render_template('character.html', character=character,sys_name = sys_name_to_id)
 
 
 @app.route('/systems')

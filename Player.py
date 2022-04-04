@@ -25,6 +25,7 @@ class Player:
     last_system = ""
     id_url = "https://esi.evetech.net/latest/universe/ids/?datasource=tranquility&language=en"
     notes = []
+    last_report = ""
 
     # TODO add images
     # https://zkillboard.com/api/stats/characterID/447073625/
@@ -44,13 +45,14 @@ class Player:
             1 == 1  # db.Characters.update_many(characters,upsert=True)
 
 
-    def __init__(self, name: str, char_id: str,last_system:str):
+    def __init__(self, name: str, char_id: str,last_system:str, last_seen, last_report):
         """Create Single Character, from list of multiple from systemreport"""
         self.name = name
         self.char_id = char_id
-        self.last_seen = datetime.now(timezone.utc)
+        self.last_seen = last_seen
         self.notes = []
         self.last_system = last_system
+        self.last_report = last_report
 
     async def get_deaths(self, recent=5):
         """Async calls to get deaths from zkb"""
@@ -143,7 +145,8 @@ class Player:
             "sec_status": self.sec_status,
             "last_seen":self.last_seen,
             "notes":self.notes,
-            "last_system":self.last_system
+            "last_system":self.last_system,
+            "last_report":self.last_report
         }
 
     def __hash__(self):
