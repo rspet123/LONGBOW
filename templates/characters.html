@@ -7,7 +7,7 @@
 </head>
     <body>
     <a href="{{ url_for('index') }}">Menu</a>
-    Characters
+    <h1>Characters</h1>
         <ul class="menu">
         {%- for character in character_list %}
             <li><a href="{{ url_for('character',name = character["_id"]) }}">{{ character["_id"]}}</a></li>

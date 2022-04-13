@@ -153,6 +153,7 @@ def system(name):
 
 @app.post('/systems/system/<name>')
 def adjust_system_jumps(name):
+    #https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
     jumps = request.form['drifter_jumps']
     system = db.Systems.find_one({"_id": name})
     drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
