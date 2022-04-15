@@ -6,35 +6,46 @@
     <title>{{ system["name"] }}</title>
 </head>
 <body>
-<a href="{{ url_for('index') }}">Menu</a>
-<h1>{{ system["name"] }}</h1>
-<h2>Players Seen</h2>
-<ul>
-    {% for player in system["common_players"] %}
-            <li><a href="{{ url_for('character',name = player) }}">{{ player }}:{{ system["common_players"][player] }}</a></li>
-    {% endfor %}
-</ul>
-<hr class="rounded">
-<h2>Nearby Jove Observatories</h2>
-<ul>
-    {%- for drifter in drifters %}
-        <li>{{ sys_data[drifter]["name"] }}</li>
-    {% endfor %}
-</ul>
-<hr class="rounded">
-<h2>Max Distance To Observatories: {{ last_dist }} Jumps</h2>
-<form action="{{ url_for('adjust_system_jumps',name = system["name"]) }}" method="post">
-    <div class="slidecontainer">
-        <input type="range" name="drifter_jumps" min="1" max="8" value={{ last_dist }} class="slider" id="drifter_jumps">
-        <input type="submit" value="Find">
-    </div>
-</form>
-<hr class="rounded">
-<h2>Reports</h2>
-<ul>
-    {% for report in reports %}
-            <li><a href="{{ url_for('report',id = report["_id"]) }}">Report At: {{ report["time"] }}</a></li>
-    {% endfor %}
-</ul>
+    <header>
+      <div class="navbar">
+          <a href="{{ url_for('menu') }}">Menu</a>
+          <a href="{{ url_for('login') }}">Login</a>
+          <a href="{{ url_for('characters') }}">Characters</a>
+          <a href="{{ url_for('systems') }}">Systems</a>
+          <a href="{{ url_for('report_viewer') }}">Reports</a>
+          <a href="{{ url_for('system_report') }}">System Report</a>
+      </div>
+    </header>
+<div class="main">
+    <h1>{{ system["name"] }}</h1>
+    <h2>Players Seen</h2>
+    <ul>
+        {% for player in system["common_players"] %}
+                <li><a href="{{ url_for('character',name = player) }}">{{ player }}:{{ system["common_players"][player] }}</a></li>
+        {% endfor %}
+    </ul>
+    <hr class="rounded">
+    <h2>Nearby Jove Observatories</h2>
+    <ul>
+        {%- for drifter in drifters %}
+            <li>{{ sys_data[drifter]["name"] }}</li>
+        {% endfor %}
+    </ul>
+    <hr class="rounded">
+    <h2>Max Distance To Observatories: {{ last_dist }} Jumps</h2>
+    <form action="{{ url_for('adjust_system_jumps',name = system["name"]) }}" method="post">
+        <div class="slidecontainer">
+            <input type="range" name="drifter_jumps" min="1" max="8" value={{ last_dist }} class="slider" id="drifter_jumps">
+            <input type="submit" value="Find">
+        </div>
+    </form>
+    <hr class="rounded">
+    <h2>Reports</h2>
+    <ul>
+        {% for report in reports %}
+                <li><a href="{{ url_for('report',id = report["_id"]) }}">Report At: {{ report["time"] }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
 </body>
 </html>

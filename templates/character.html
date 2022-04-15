@@ -6,8 +6,9 @@
     <title>{{character['_id']}}</title>
 </head>
     <body>
+    <div class="main">
         <a class="menu_button" href="{{ url_for('index') }}">Menu</a>
-        <button onclick="history.back()">Go Back</button>
+        <button class="menu_button" onclick="history.back()">Go Back</button>
         <br>
         <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt={{character['_id']}}>
         <ul class="menu">
@@ -35,5 +36,6 @@
 
 
         </ul>
+    </div>
     </body>
 </html>

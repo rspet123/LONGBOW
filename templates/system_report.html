@@ -8,34 +8,44 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
 </head>
 <body>
-<a class="menu_button" href="{{ url_for('index') }}">Menu</a>
-<form action="{{ url_for('post_system_report') }}" method="post">
-    <label for="system">System:</label>
-    <label>
-        <input type="text" name="system" id="tags">
+    <header>
+      <div class="navbar">
+              <a href="{{ url_for('menu') }}">Menu</a>
+              <a href="{{ url_for('login') }}">Login</a>
+              <a href="{{ url_for('characters') }}">Characters</a>
+              <a href="{{ url_for('systems') }}">Systems</a>
+              <a href="{{ url_for('report_viewer') }}">Reports</a>
+      </div>
+    </header>
+<div class="main">
+    <form action="{{ url_for('post_system_report') }}" method="post">
+        <label for="system">System:</label>
+        <label>
+            <input type="text" name="system" id="system_in">
 
-            <script>
-              $( function() {
-                var availableTags = [
-                    {% for system in all_systems %}
-                        "{{system}}",
-                    {% endfor %}
-                ];
-                $( "#tags" ).autocomplete({
-                  source: availableTags
-                });
-              } );
-            </script>
-    </label>
-        <label for="characters">Characters:</label>
-        <label>
-            <textarea placeholder="Paste Local Here" name="characters" cols="50" rows="5"></textarea>
+                <script>
+                  $( function() {
+                    var availableTags = [
+                        {% for system in all_systems %}
+                            "{{system}}",
+                        {% endfor %}
+                    ];
+                    $( "#system_in" ).autocomplete({
+                      source: availableTags
+                    });
+                  } );
+                </script>
         </label>
-        <label for="dscan">DSCAN:</label>
-        <label>
-            <textarea name="dscan" placeholder="Paste DSCAN Here" cols="50" rows="5"></textarea>
-        </label>
-    <input type="submit">
-</form>
+            <label for="characters">Characters:</label>
+            <label>
+                <textarea placeholder="Paste Local Here" name="characters" cols="50" rows="5"></textarea>
+            </label>
+            <label for="dscan">DSCAN:</label>
+            <label>
+                <textarea name="dscan" placeholder="Paste DSCAN Here" cols="50" rows="5"></textarea>
+            </label>
+        <input type="submit">
+    </form>
+</div>
 </body>
 </html>
