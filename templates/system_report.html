@@ -3,22 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>System Report</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
 </head>
 <body>
-<a href="{{ url_for('index') }}">Menu</a>
+<a class="menu_button" href="{{ url_for('index') }}">Menu</a>
 <form action="{{ url_for('post_system_report') }}" method="post">
     <label for="system">System:</label>
     <label>
-        <input type="text" name="system">
+        <input type="text" name="system" id="tags">
+
+            <script>
+              $( function() {
+                var availableTags = [
+                    {% for system in all_systems %}
+                        "{{system}}",
+                    {% endfor %}
+                ];
+                $( "#tags" ).autocomplete({
+                  source: availableTags
+                });
+              } );
+            </script>
     </label>
-    <label for="characters">Characters:</label>
-    <label>
-        <textarea name="characters" cols="50" rows="5"></textarea>
-    </label>
-    <label for="dscan">DSCAN:</label>
-    <label>
-        <textarea name="dscan" cols="50" rows="5"></textarea>
-    </label>
+        <label for="characters">Characters:</label>
+        <label>
+            <textarea placeholder="Paste Local Here" name="characters" cols="50" rows="5"></textarea>
+        </label>
+        <label for="dscan">DSCAN:</label>
+        <label>
+            <textarea name="dscan" placeholder="Paste DSCAN Here" cols="50" rows="5"></textarea>
+        </label>
     <input type="submit">
 </form>
 </body>

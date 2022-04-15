@@ -158,7 +158,7 @@ def system(name):
 @app.post('/systems/system/<name>')
 def adjust_system_jumps(name):
     """For adjusting drifter hole jumps"""
-    #https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
+
     jumps = request.form['drifter_jumps']
     system = db.Systems.find_one({"_id": name})
     reports = character_list = db.SystemReport.find({"system_name": name})
@@ -197,10 +197,13 @@ def targets():
 @app.get('/system_report')
 def system_report():
     """file system report"""
-    return render_template('system_report.html')
+    all_systems = list(sys_name_to_id.keys())
+    print(all_systems)
+    return render_template('system_report.html',all_systems = all_systems)
 
 
 @app.post('/system_report')
+#https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
 def post_system_report():
     sys_name = request.form['system']
     chars_in_system = request.form['characters'].splitlines()
@@ -209,8 +212,7 @@ def post_system_report():
     report = SystemReport(chars_in_system, sys_name, sys_name_to_id[sys_name]["system_id"], datetime.now(timezone.utc))
     report.get_player_ids()
     report.store_report()
-    near_drifters = eve_data_tools.get_nearest_drifter_systems(drifters, system_data,
-                                                               sys_name_to_id[sys_name]["system_id"], 5)
+
 
     return render_template('view_report.html', report=report.as_json())
 
