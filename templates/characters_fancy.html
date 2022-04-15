@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/main.css') }}">
+    <meta charset="UTF-8">
+    <title>Characters</title>
+</head>
+<body>
+<a href="{{ url_for('index') }}">Menu</a>
+{%- for character in character_list %}
+<div class="flip-card">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <div class="container">
+          <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt="{{character['_id']}}" style="width:256px;height:256px;">
+          <div class="centered">{{ character['_id'] }}</div>
+        </div>
+    </div>
+    <div class="flip-card-back">
+      <p>Last Seen at: {{character['last_seen']}}</p>
+        <ul>
+            <li><a href="{{"https://evewho.com/character/" + character["name"]|string}}">EveWho</a></li>
+            <li><a href="{{"https://zkillboard.com/character/" + character["_id"] + "/" }}">zKill</a></li>
+            <li><a href="{{ url_for('system',name = character['last_system']) }}">In System: {{character['last_system']}}</a></li>
+            <li><a href="{{ url_for('report',id =  character['last_report'])}}">Report</a></li>
+        </ul>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</body>
+</html>

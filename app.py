@@ -95,7 +95,7 @@ def menu():
 @app.route('/characters')
 def characters():
     character_list = db.Characters.find()
-    return render_template('characters.html', character_list=character_list)
+    return render_template('characters_fancy.html', character_list=character_list)
 
 
 @app.route('/characters/character_name/<name>')
@@ -103,7 +103,7 @@ def character(name):
     # TODO add functionality
     character = db.Characters.find_one({"_id": name})
     print(character)
-    return render_template('character.html', character=character, sys_name=sys_name_to_id)
+    return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.route('/characters/character_id/<id>')
@@ -111,7 +111,7 @@ def character_id(id):
     # TODO add functionality
     character = db.Characters.find_one({"name": id})
     print(character)
-    return render_template('character.html', character=character, sys_name=sys_name_to_id)
+    return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.post('/characters/character_name/<name>/comment')
@@ -127,7 +127,7 @@ def post_comment(name):
     character["notes"].append(comment)
     # Put it back
     db.Characters.update_one({"_id": character["_id"]}, {"$set": character}, upsert=True)
-    return render_template('character.html', character=character, sys_name=sys_name_to_id)
+    return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
 
 
 @app.route('/systems')
@@ -140,29 +140,39 @@ def systems():
 @app.get('/systems/system/<name>')
 def system(name):
     system = db.Systems.find_one({"_id": name})
+    reports = character_list = db.SystemReport.find({"system_name":name})
+    print(reports)
     drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
                                                                  system_data,
                                                                  sys_name_to_id[system["_id"]]["system_id"],
                                                                  5)
+
     return render_template('system.html',
                            system=system,
                            drifters=drifter_systems,
                            sys_data=system_data,
-                           last_dist=str(5))
+                           last_dist=str(5),
+                           reports=reports)
 
 
 @app.post('/systems/system/<name>')
 def adjust_system_jumps(name):
+    """For adjusting drifter hole jumps"""
     #https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
     jumps = request.form['drifter_jumps']
     system = db.Systems.find_one({"_id": name})
+    reports = character_list = db.SystemReport.find({"system_name": name})
+    print(reports)
     drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
                                                                  system_data,
                                                                  sys_name_to_id[system["name"]]["system_id"],
                                                                  int(jumps))
     print(int(jumps))
-    return render_template('system.html', system=system, drifters=drifter_systems, sys_data=system_data,
-                           last_dist=str(jumps))
+    return render_template('system.html', system=system,
+                           drifters=drifter_systems,
+                           sys_data=system_data,
+                           last_dist=str(jumps),
+                           reports=reports)
 
 
 @app.route('/report_viewer')
