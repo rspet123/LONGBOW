@@ -34,8 +34,8 @@ def get_system_data():
 def get_system_data_by_name():
     system_data = {}
     with open("resources/mapSolarSystems.csv") as systems:
-        file = csv.reader(systems)
-        for line in file:
+        file = list(csv.reader(systems))
+        for line in file[1:]:
             try:
                 system_data[line[3]] = {"system_id": line[2]}
             except Exception:
