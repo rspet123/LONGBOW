@@ -92,44 +92,55 @@ class Player:
         """Gathers stats from zKillboard's API"""
         # We need to cast all ints etc to strings for storage on mongodb
         # Use this https://evewho.com/api/character/1633218082
-        # TODO Really fix this
-        try:
-            response = requests.get("https://zkillboard.com/api/stats/characterID/{id}/".format(id=self.char_id))
-            stats_data = json.loads(response.text)
-        except Exception:
-            print("Not on zKill")
-            return -1
-        try:
-            self.corp_id = stats_data["info"]["corporationID"]
-            self.alliance_id = stats_data["info"]["allianceID"]
-            self.sec_status = stats_data["info"]["secStatus"]
-        except KeyError:
-            self.corp_id = "98494816"
-            self.alliance_id = "99005678"
-        # TODO zkill api integration is busted
-        # Add common Ships
-        try:
-            # Add common Systems
-            for system in stats_data["topLists"][4]["values"]:
-                print(system)
-                self.common_systems[str(system["solarSystemID"])] = system["kills"]
-            for ship in stats_data["topLists"][3]["values"]:
-                print(ship)
-                self.common_ship_types[str(ship["groupID"])] = str(ship["kills"])
-                self.common_ships[str(ship["shipTypeID"])] = str(ship["kills"])
-        except KeyError:
-            self.common_ship_types["NA"] = str({})
-            self.common_ships["NA"] = str({})
-            self.common_systems["NA"] = str({})
-        try:
-            self.isk_lost = stats_data["iskLost"]
-            self.isk_killed = stats_data["iskDestroyed"]
-            self.danger = stats_data["dangerRatio"]
-        except KeyError:
-            # No key? Default values
-            self.isk_lost = 0
-            self.isk_killed = 0
-            self.danger = 0
+        # TODO Really REALLY fix this
+
+        print(self.name)
+        evewho_response = requests.get(f"https://evewho.com/api/character/{self.name}")
+        print(evewho_response.text)
+        evewho_data = json.loads(evewho_response.text)
+        print(evewho_data)
+        self.corp_id = evewho_data["info"][0]["corporation_id"]
+        self.alliance_id = evewho_data["info"][0]["alliance_id"]
+        self.sec_status = evewho_data["info"][0]["sec_status"]
+
+        # TODO FIX ZKILL
+        #try:
+        #    response = requests.get("https://zkillboard.com/api/stats/characterID/{id}/".format(id=self.char_id))
+        #    stats_data = json.loads(response.text)
+        #except Exception:
+        #    print("Not on zKill")
+        #    return -1
+        #try:
+        #    self.corp_id = stats_data["info"]["corporationID"]
+        #    self.alliance_id = stats_data["info"]["allianceID"]
+        #    self.sec_status = stats_data["info"]["secStatus"]
+        #except KeyError:
+        #    self.corp_id = "98494816"
+        #    self.alliance_id = "99005678"
+        ## TODO zkill api integration is busted
+        ## Add common Ships
+        #try:
+        #    # Add common Systems
+        #    for system in stats_data["topLists"][4]["values"]:
+        #        print(system)
+        #        self.common_systems[str(system["solarSystemID"])] = system["kills"]
+        #    for ship in stats_data["topLists"][3]["values"]:
+        #        print(ship)
+        #        self.common_ship_types[str(ship["groupID"])] = str(ship["kills"])
+        #        self.common_ships[str(ship["shipTypeID"])] = str(ship["kills"])
+        #except KeyError:
+        #    self.common_ship_types["NA"] = str({})
+        #    self.common_ships["NA"] = str({})
+        #    self.common_systems["NA"] = str({})
+        #try:
+        #    self.isk_lost = stats_data["iskLost"]
+        #    self.isk_killed = stats_data["iskDestroyed"]
+        #    self.danger = stats_data["dangerRatio"]
+        #except KeyError:
+        #    # No key? Default values
+        #    self.isk_lost = 0
+        #    self.isk_killed = 0
+        #    self.danger = 0
 
         return 1
 
