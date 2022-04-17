@@ -95,7 +95,7 @@ def menu():
 @app.route('/characters')
 def characters():
     character_list = db.Characters.find()
-    return render_template('characters_fancy.html', character_list=character_list)
+    return render_template('characters_fancy.html', character_list=character_list,system_data=system_data)
 
 
 @app.route('/characters/character_name/<name>')

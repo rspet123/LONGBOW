@@ -26,12 +26,23 @@
         </div>
     </div>
     <div class="flip-card-back">
-      <p>Last Seen at: {{character['last_seen']}}</p>
         <ul>
-            <li><a href="{{"https://evewho.com/character/" + character["name"]|string}}">EveWho</a></li>
-            <li><a href="{{"https://zkillboard.com/character/" + character["_id"] + "/" }}">zKill</a></li>
-            <li><a href="{{ url_for('system',name = character['last_system']) }}">In System: {{character['last_system']}}</a></li>
-            <li><a href="{{ url_for('report',id =  character['last_report'])}}">Report</a></li>
+            <li><a href="{{ url_for('character',name = character["_id"]) }}" class = "flyout-button">Detail</a></li>
+            <li><a href="{{"https://evewho.com/character/" + character["name"]|string}}" target="_blank" rel="noreferrer noopener" class = "flyout-button">EveWho</a></li>
+            <li><a href="{{"https://zkillboard.com/character/" + character["_id"] + "/" }}" target="_blank" rel="noreferrer noopener" class = "flyout-button">zKill</a></li>
+            <li><a href="{{ url_for('system',name = character['last_system']) }}" class = "flyout-button">In System: {{character['last_system']}}</a></li>
+            <li><a href="{{ url_for('report',id =  character['last_report'])}}" class = "flyout-button">Report</a></li>
+            <div class="flip-card-flyout">
+                <div class="container">
+                    <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt="{{character['_id']}}" style="width:256px;height:256px;">
+                    <div class="centered">{{ character['_id'] }}</div>
+                </div>
+                    {%- for system in character["common_systems"] %}
+                        {% if system != "NA" %}
+                            <li><a href="{{ url_for('system',name = system_data[system]["name"]) }}" class = "flyout-button">{{system_data[system]["name"]}}</a></li>
+                        {% endif %}
+                    {% endfor %}
+            </div>
         </ul>
     </div>
   </div>
