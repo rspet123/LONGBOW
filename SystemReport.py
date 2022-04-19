@@ -39,6 +39,7 @@ class SystemReport:
         headers["Cache-Control"] = "no-cache"
 
         query = str(self.players).replace("\'", "\"")
+        # TODO fix above, it's messed up
         resp = requests.post(self.id_url, headers=headers, data=query)
         print(resp.text)
         char_ids = json.loads(resp.text)["characters"]

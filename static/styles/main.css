@@ -205,3 +205,15 @@ textarea:focus {
 .main {
   margin-top: 50px;
 }
+
+.bottom-left {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}

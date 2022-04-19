@@ -5,7 +5,7 @@ from flask import Flask, request, session, url_for, render_template, redirect
 from esipy import EsiApp, EsiSecurity, EsiClient
 from esipy.exceptions import APIException
 from datetime import datetime, timezone
-# import pickle
+import pickle
 import configparser
 import random
 import hmac
@@ -84,9 +84,6 @@ def index():
     return render_template('menu.html')
 
 
-# TODO I NEED HTML FOR ALL THIS UGH
-# https://stackoverflow.com/questions/11124940/creating-link-to-an-url-of-flask-app-in-jinja2-template
-
 @app.route('/menu')
 def menu():
     return render_template('menu.html')
@@ -95,12 +92,13 @@ def menu():
 @app.route('/characters')
 def characters():
     character_list = db.Characters.find()
-    return render_template('characters_fancy.html', character_list=character_list,system_data=system_data)
+    return render_template('characters_fancy.html', character_list=character_list, system_data=system_data)
 
 
 @app.route('/characters/character_name/<name>')
 def character(name):
-    # TODO add functionality
+    # TODO add corp names + caching
+    # https://evewho.com/api/corplist/98330748
     character = db.Characters.find_one({"_id": name})
     print(character)
     return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
@@ -108,7 +106,6 @@ def character(name):
 
 @app.route('/characters/character_id/<id>')
 def character_id(id):
-    # TODO add functionality
     character = db.Characters.find_one({"name": id})
     print(character)
     return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
@@ -140,7 +137,7 @@ def systems():
 @app.get('/systems/system/<name>')
 def system(name):
     system = db.Systems.find_one({"_id": name})
-    reports = character_list = db.SystemReport.find({"system_name":name})
+    reports = character_list = db.SystemReport.find({"system_name": name})
     print(reports)
     drifter_systems = eve_data_tools.get_nearest_drifter_systems(drifters,
                                                                  system_data,
@@ -199,11 +196,11 @@ def system_report():
     """file system report"""
     all_systems = list(sys_name_to_id.keys())
     print(all_systems)
-    return render_template('system_report.html',all_systems = all_systems)
+    return render_template('system_report.html', all_systems=all_systems)
 
 
 @app.post('/system_report')
-#https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
+# https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
 def post_system_report():
     sys_name = request.form['system']
     chars_in_system = request.form['characters'].splitlines()
@@ -212,7 +209,6 @@ def post_system_report():
     report = SystemReport(chars_in_system, sys_name, sys_name_to_id[sys_name]["system_id"], datetime.now(timezone.utc))
     report.get_player_ids()
     report.store_report()
-
 
     return render_template('view_report.html', report=report.as_json())
 
