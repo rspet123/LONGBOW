@@ -18,6 +18,9 @@
     </header>
 <div class="main">
     <h1>{{ system["name"] }}</h1>
+    <ul>
+        <li><a href="https://zkillboard.com/system/{{ system["system_id"] }}/">zKill</a></li>
+    </ul>
     <h2>Players Seen</h2>
     <ul>
         {% for player in system["common_players"] %}
