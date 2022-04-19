@@ -22,6 +22,12 @@
     <div class="flip-card-front">
       <div class="container">
           <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt="{{character['_id']}}" style="width:256px;height:256px;">
+          <div class="bottom-left">
+               <img src="https://image.eveonline.com/Corporation/{{ character["corp_id"] }}_64.png" alt="{{character['_id']}}" style="width:64px;height:64px;">
+          </div>
+          <div class="bottom-right">
+               <img src="https://image.eveonline.com/Alliance/{{ character["alliance_id"] }}_64.png" alt="{{character['_id']}}" style="width:64px;height:64px;">
+          </div>
           <div class="centered">{{ character['_id'] }}</div>
         </div>
     </div>
