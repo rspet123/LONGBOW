@@ -31,7 +31,7 @@
     <h2>Nearby Jove Observatories</h2>
     <ul>
         {%- for drifter in drifters %}
-            <li>{{ sys_data[drifter]["name"] }}</li>
+            <li><a href="https://zkillboard.com/system/{{ name_data[sys_data[drifter]["name"]]["system_id"] }}/" target="_blank" rel="noreferrer noopener">{{ sys_data[drifter]["name"] }}</a></li>
         {% endfor %}
     </ul>
     <hr class="rounded">

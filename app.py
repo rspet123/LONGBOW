@@ -149,7 +149,8 @@ def system(name):
                            drifters=drifter_systems,
                            sys_data=system_data,
                            last_dist=str(5),
-                           reports=reports)
+                           reports=reports,
+                           name_data=sys_name_to_id)
 
 
 @app.post('/systems/system/<name>')
@@ -169,7 +170,8 @@ def adjust_system_jumps(name):
                            drifters=drifter_systems,
                            sys_data=system_data,
                            last_dist=str(jumps),
-                           reports=reports)
+                           reports=reports,
+                           name_data=sys_name_to_id)
 
 
 @app.route('/report_viewer')
