@@ -24,6 +24,18 @@ class SystemReport:
 
 
     def __init__(self, players: list, system_name: str, system_id: str, time=datetime.now(timezone.utc)):
+        """
+        This function takes in a list of players, a system name, a system id, and a time, and sets the players, system name,
+        time, and system id to the values passed in, and sets the player objects and player ids to empty lists
+
+        :param players: list of player names
+        :type players: list
+        :param system_name: The name of the system the players are in
+        :type system_name: str
+        :param system_id: The system ID of the system the players are in
+        :type system_id: str
+        :param time: The time the event occurred
+        """
         self.players = players
         self.system_name = system_name
         self.time = time
@@ -32,6 +44,9 @@ class SystemReport:
         self.player_ids = []
 
     def get_player_ids(self):
+        """
+        It takes a list of player names, and returns a list of player objects
+        """
         headers = {}
         headers["accept"] = "application/json"
         headers["Accept-Language"] = "en"
@@ -51,11 +66,16 @@ class SystemReport:
                                self.time,
                                (str(self.time) + "," + self.system_id))
             curr_char.common_systems[self.system_id] = curr_char.common_systems.get(self.system_id, 0) + 1
+            print(f"adding {self.system_id} to player {curr_char.name}")
             self.player_objects.append(curr_char)
             self.player_ids.append(char_id["name"])
 
     def as_json(self):
-        """Returns a json for mongodb"""
+        """
+        It takes a list of player ids, a time, a system name, and a system id, and returns a dictionary with the same
+        information, but with a different key for the time
+        :return: A dictionary with the keys: _id, player_ids, time, system_name, system_id
+        """
         return {
             "_id": (str(self.time) + "," + self.system_id),
             "player_ids": self.player_ids,
@@ -68,6 +88,9 @@ class SystemReport:
         return "System Report at {time} in system {name}".format(time=self.time, name=self.system_name)
 
     def store_report(self):
+        """
+        It takes a report object, and stores it in the database
+        """
         db.SystemReport.insert_one(self.as_json())
         print(self.player_objects)
         system = db.Systems.find_one({"name": self.system_name})

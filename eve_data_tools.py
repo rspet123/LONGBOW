@@ -5,6 +5,10 @@ from datetime import datetime
 
 
 def get_system_data():
+    """
+    It reads the mapSolarSystems.csv file and creates a dictionary of dictionaries
+    :return: A dictionary of dictionaries.
+    """
     system_data = {}
 
     # regionID,constellationID,solarSystemID,solarSystemName,x,y,z,xMin,xMax,yMin,yMax,zMin,zMax,luminosity,border,fringe,corridor,hub,international,regional,constellation,security,factionID,radius,sunTypeID,securityClass
@@ -32,6 +36,11 @@ def get_system_data():
 
 
 def get_system_data_by_name():
+    """
+    It opens the mapSolarSystems.csv file, reads it into a list, and then creates a dictionary with the system name as the
+    key and the system id as the value
+    :return: A dictionary of system names and their system_id
+    """
     system_data = {}
     with open("resources/mapSolarSystems.csv") as systems:
         file = list(csv.reader(systems))
@@ -45,6 +54,10 @@ def get_system_data_by_name():
 
 
 def get_possible_drifter_systems():
+    """
+    It reads the file "JoveSystems.csv" and returns a dictionary of the systems, constellations, and regions
+    :return: A dictionary of dictionaries.
+    """
     drifter_systems = {}
     with open("resources/JoveSystems.csv") as drifters:
         file = csv.reader(drifters)
@@ -56,6 +69,13 @@ def get_possible_drifter_systems():
 
 
 def get_system_jumps(system_data: dict):
+    """
+    It takes a dictionary of system data and adds a list of the systems that each system can jump to
+
+    :param system_data: dict
+    :type system_data: dict
+    :return: A dictionary of dictionaries.
+    """
     # fromRegionID, fromConstellationID, fromSolarSystemID, toSolarSystemID, toConstellationID, toRegionID
     with open("resources/mapSolarSystemJumps.csv") as gates:
         file = csv.reader(gates)
@@ -68,10 +88,22 @@ def get_system_jumps(system_data: dict):
             except KeyError:
                 print("No Such System")
 
-    return (system_data)
+    return system_data
 
 
 def get_system_distance(system_data: dict, system_1: str, system_2: str):
+    """
+    > Calculate the distance between two systems by taking the distance between the minimum and maximum coordinates of each
+    system
+
+    :param system_data: a dictionary of all the systems in EVE, with their coordinates and other data
+    :type system_data: dict
+    :param system_1: The name of the system you want to start from
+    :type system_1: str
+    :param system_2: str = "Jita"
+    :type system_2: str
+    :return: A dictionary of all the systems in the game.
+    """
     """simple 3d distance calculation for jump range, returns *rough* distance in LY"""
     system_1_data = system_data[system_1]
     system_2_data = system_data[system_2]
@@ -84,6 +116,19 @@ def get_system_distance(system_data: dict, system_1: str, system_2: str):
 
 
 def get_path_to_system(system_data: dict, start: str, end: str):
+    """
+    BFS Search to find number of jumps to system
+
+    If we run out of gates to visit, we return -1.
+
+    :param system_data: a dictionary of all the systems in the game
+    :type system_data: dict
+    :param start: The system ID of the starting system
+    :type start: str
+    :param end: The system you want to get to
+    :type end: str
+    :return: The number of jumps from the start system to the end system.
+    """
     """BFS to find gate jump min distance, returns -1 if no gate-to-gate route"""
     queue = []
     visited = []
@@ -113,6 +158,20 @@ def get_path_to_system(system_data: dict, start: str, end: str):
 
 
 def get_nearest_drifter_systems(drifters: list, system_data: dict, system: str, jumps: int):
+    """
+    > This function takes a list of drifter systems, a dictionary of system data, a system name, and a number of jumps, and
+    returns a list of all drifter systems within x jumps
+
+    :param drifters: list of drifter systems
+    :type drifters: list
+    :param system_data: This is the data from the system_data.json file
+    :type system_data: dict
+    :param system: The system you're starting from
+    :type system: str
+    :param jumps: The number of jumps you want to search for drifters
+    :type jumps: int
+    :return: A list of all drifter systems within x jumps
+    """
     """Returns all drifter systems within x jumps"""
     # TODO Have this return a dict, with key of name, and value as #jumps
     drifters_nearby = []

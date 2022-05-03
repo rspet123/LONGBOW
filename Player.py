@@ -55,8 +55,18 @@ class Player:
         self.last_system = last_system
         self.last_report = last_report
         self.times = []
+        self.common_systems = {}
 
     async def get_deaths(self, recent=5):
+        """
+        It takes the character ID of a player, and then uses the zKillboard API to get the most recent 5 kills of that
+        player. It then uses the ESI to get the killmail for each of those kills, and then adds the killmail to a list of
+        recent deaths. It also adds the solar system ID of the kill to a dictionary of common systems, and increments the
+        value of that system by 1
+
+        :param recent: How many recent deaths to get, defaults to 5 (optional)
+        :return: A list of dictionaries, each dictionary is a killmail
+        """
         """Async calls to get deaths from zkb"""
         # Probably shouldn't use this
         response = requests.get("https://zkillboard.com/api/losses/characterID/{id}/".format(id=self.char_id))
@@ -72,6 +82,20 @@ class Player:
         return death_data
 
     async def get_kills(self, recent=5):
+        """
+        It takes the character ID of a player, and then uses the zKillboard API to get the most recent kills of that player.
+
+
+        The function then takes the killmail ID and hash of each kill, and uses the ESI API to get the full killmail.
+
+        The function then adds the killmail to a list of recent kills, and adds the solar system ID of the kill to a
+        dictionary of common systems.
+
+        The function then returns the list of recent kills.
+
+        :param recent: How many kills to get, defaults to 5 (optional)
+        :return: A list of dictionaries.
+        """
         """Async calls to get deaths from zkb"""
         # Probably shouldn't use this
         response = requests.get("https://zkillboard.com/api/kills/characterID/{id}/".format(id=self.char_id))
@@ -89,6 +113,10 @@ class Player:
         return kills_data
 
     def get_stats(self):
+        """
+        It takes a character name, and returns a dictionary of the character's stats
+        :return: A list of dictionaries.
+        """
         """Gathers stats from zKillboard's API"""
         # We need to cast all ints etc to strings for storage on mongodb
         # Use this https://evewho.com/api/character/1633218082
@@ -145,6 +173,10 @@ class Player:
         return 1
 
     def as_json(self):
+        """
+        It takes the data from the class and returns it as a dictionary
+        :return: A dictionary of the class attributes.
+        """
         """Function to return as a dict/json for MondoDB storage"""
         return {
             "_id": self.char_id,
@@ -165,8 +197,12 @@ class Player:
         }
 
     def __hash__(self):
+        """
+        The hash function is used to hash the player class in a dict
+        :return: The hash of the character id.
+        """
         """Allows us to hash the player class in a dict"""
-        return self.char_id
+        return hash(self.char_id)
 
     def __str__(self):
         return self.name

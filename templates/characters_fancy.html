@@ -52,8 +52,13 @@
         </ul>
     </div>
   </div>
+    <div class="character-info">
+        <img src="{{ "https://images.evetech.net/characters/" + character['name']|string+ "/portrait?size=256" }}" alt="{{character['_id']}}" style="width:256px;height:256px;">
+    </div>
 </div>
+
 {% endfor %}
+
     </div>
 </body>
 </html>

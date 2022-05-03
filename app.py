@@ -70,6 +70,10 @@ data_store = {}
 
 @app.route('/sso/login')
 def login():
+    """
+    It generates a random token, stores it in the session, and then redirects the user to the EVE SSO login page
+    :return: The redirect function is being returned.
+    """
     """ this redirects the user to the EVE SSO login """
     token = generate_token()
     session['token'] = token
@@ -91,12 +95,22 @@ def menu():
 
 @app.route('/characters')
 def characters():
+    """
+    It finds all the characters in the database and passes them to the template
+    :return: A list of all the characters in the database.
+    """
     character_list = db.Characters.find()
     return render_template('characters_fancy.html', character_list=character_list, system_data=system_data)
 
 
 @app.route('/characters/character_name/<name>')
 def character(name):
+    """
+    It takes a character name, looks it up in the database, and renders a template with the character's data
+
+    :param name: The name of the character you want to look up
+    :return: A dictionary of the character's information.
+    """
     # TODO add corp names + caching
     # https://evewho.com/api/corplist/98330748
     character = db.Characters.find_one({"_id": name})
@@ -106,6 +120,13 @@ def character(name):
 
 @app.route('/characters/character_id/<id>')
 def character_id(id):
+    """
+    It takes the name of a character, finds the character in the database, and then renders a template with the character's
+    information
+
+    :param id: the name of the character
+    :return: A character object
+    """
     character = db.Characters.find_one({"name": id})
     print(character)
     return render_template('character_fancy.html', character=character, sys_name=sys_name_to_id)
@@ -113,6 +134,13 @@ def character_id(id):
 
 @app.post('/characters/character_name/<name>/comment')
 def post_comment(name):
+    """
+    It takes a character name, finds the character in the database, adds the comment to the character's notes, and then
+    updates the database with the character
+
+    :param name: the name of the character
+    :return: A character object
+    """
     # TODO add functionality
     comment = request.form['note']
     character = db.Characters.find_one({"_id": name})
@@ -129,6 +157,10 @@ def post_comment(name):
 
 @app.route('/systems')
 def systems():
+    """
+    It finds all the systems in the database and passes them to the template
+    :return: The systems.html template is being returned.
+    """
     system_list = db.Systems.find()
     return render_template('systems.html', system_list=system_list)
 
@@ -136,6 +168,13 @@ def systems():
 # TODO add list of reports to the system page
 @app.get('/systems/system/<name>')
 def system(name):
+    """
+    It takes a system name, finds the system in the database, finds all reports for that system, finds the nearest drifter
+    systems, and then renders the system.html template with all of that data
+
+    :param name: The name of the system to display
+    :return: The system.html template is being returned.
+    """
     system = db.Systems.find_one({"_id": name})
     reports = character_list = db.SystemReport.find({"system_name": name})
     print(reports)
@@ -155,6 +194,14 @@ def system(name):
 
 @app.post('/systems/system/<name>')
 def adjust_system_jumps(name):
+    """
+    It takes a system name, finds the system in the database, finds the reports for that system, finds the nearest drifter
+    systems, and renders the system.html template with the system, drifter systems, system data, last distance, reports, and
+    name data
+
+    :param name: The name of the system you want to look up
+    :return: The system.html template is being returned.
+    """
     """For adjusting drifter hole jumps"""
 
     jumps = request.form['drifter_jumps']
@@ -176,14 +223,23 @@ def adjust_system_jumps(name):
 
 @app.route('/report_viewer')
 def report_viewer():
-    # TODO query db for reports
+    """
+    It queries the database for all system reports, and then renders the view_system_reports.html template, passing in the
+    reports variable.
+    :return: A list of reports
+    """
     reports = db.SystemReport.find()
     return render_template('view_system_reports.html', reports=reports)
 
 
 @app.route('/report/<id>')
 def report(id):
-    # TODO query db for reports
+    """
+    It queries the database for a report with the given id, and then renders a template with the report
+
+    :param id: the id of the report to be viewed
+    :return: A report object
+    """
     report = db.SystemReport.find_one({"_id": id})
     return render_template('view_report.html', report=report)
 
@@ -195,6 +251,11 @@ def targets():
 
 @app.get('/system_report')
 def system_report():
+    """
+    The function system_report() returns a rendered template called system_report.html, which is a list of all the systems
+    in the system_name_to_id dictionary.
+    :return: The system_report.html file is being returned.
+    """
     """file system report"""
     all_systems = list(sys_name_to_id.keys())
     print(all_systems)
@@ -202,8 +263,12 @@ def system_report():
 
 
 @app.post('/system_report')
-# https://www.geeksforgeeks.org/autocomplete-input-suggestion-using-python-and-flask/
 def post_system_report():
+    """
+    It takes the form data from the web page, creates a `SystemReport` object, gets the player IDs from the API, and then
+    stores the report in the database
+    :return: A JSON object containing the report data.
+    """
     sys_name = request.form['system']
     chars_in_system = request.form['characters'].splitlines()
     dscan = request.form['dscan']
@@ -217,6 +282,11 @@ def post_system_report():
 
 @app.get('/stats')
 def stats():
+    """
+    It takes the current system ID from the character's location, then uses the `eve_data_tools` module to get the nearest
+    drifter systems, and returns the output
+    :return: A list of the nearest drifter systems to the current system.
+    """
     """Shows Stats for the current system, WIP"""
     # get_characters_character_id_location
     if data_store.get("character_data", False):
@@ -236,6 +306,11 @@ def stats():
 
 @app.route('/sso/callback')
 def callback():
+    """
+    It takes the code and state parameters from the URL, checks that the state parameter matches the session token, and then
+    uses the code parameter to get an access token from the EVE Online SSO
+    :return: The character data is being returned.
+    """
     code = request.args.get('code')
     token = request.args.get('state')
     sess_token = session.pop('token', None)
@@ -253,4 +328,4 @@ def callback():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="0.0.0.0", port=8080)
